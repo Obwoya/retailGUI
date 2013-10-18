@@ -681,6 +681,9 @@ color: rgb(255, 255, 255)
          </item>
          <item row="3" column="0">
           <widget class="QPushButton" name="updatestock">
+           <property name="styleSheet">
+            <string notr="true">background-image:/img/logo.png</string>
+           </property>
            <property name="text">
             <string>Sync With HQ</string>
            </property>
@@ -713,7 +716,9 @@ color: rgb(255, 255, 255)
    </attribute>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="pictures.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>logout</sender>

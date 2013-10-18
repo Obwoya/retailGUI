@@ -53,46 +53,67 @@ function decode_base64($sData){
 
 function createJson()
 {
-	$con = dbconnect();
-	$qtyreq = 5;
-	$posts = array();
-	$response = array();
-	$query = mysql_query("SELECT barcode FROM product");
-	while($row = mysql_fetch_array($query))
-	{
-	$barcode = $row['barcode'];
+        $con = dbconnect();
+        $posts = array();
+        $response = array();
+        $query = mysql_query("SELECT barcode FROM product");
+        while($row = mysql_fetch_array($query))
+        {
+            $barcode = $row['barcode'];
+            $qtyquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
+                    WHERE t.transactionid = td.transactionid 
+                    AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -7 DAY ) 
+                    AND DATE <= CURDATE( )  
+                    AND type = 'sale' 
+                    AND barcode =$barcode;");
+            $qtyreq = mysql_fetch_array($qtyquery);
+            $qtyreq = intval($qtyreq[0]);
+            $qtyreq = intval($qtyreq);
 
-	$checkIfTrans = mysql_query("SELECT count(*) FROM TransactionDetails td, Transaction t 
-			WHERE t.transactionID = td.transactionID 
-			AND t.DATE = CURDATE()   
-			AND barcode =$barcode;");
-	$isThereAny = mysql_fetch_array($checkIfTrans);
-	$isThereAny = $isThereAny[0];
-	if ($isThereAny > 0) {
-		$qtyquery = mysql_query("SELECT SUM( unitsold ) FROM TransactionDetails td, Transaction t 
-				WHERE t.transactionID = td.transactionID 
-				AND t.DATE = CURDATE( )   
-				AND barcode =$barcode;");
-		$qtySold = mysql_fetch_row($qtyquery);
-		$qtySold = $qtySold[0];
+            $holdingquery = mysql_query("SELECT stocklevel, active FROM product WHERE barcode = $barcode");
+            $holdreq = mysql_fetch_array($holdingquery);
+            $holdingreq = intval($holdreq[0]);
+            $status = intval($holdreq[1]);
+            $qtyreq = $qtyreq - $holdingreq;
 
-		$qtyreq = $qtySold;
-		
-		$enc_key = "AXCDSCFDSSXCVSS";
-		$posts[] = array('barcode'=>$barcode, 'quantity'=>encrypt($qtyreq));
-		}
-	}
-	
-	$response['products'] = $posts;
-	
-	//name file by shop id from settings file
-	$filename = '0.json';
-	
-	$fp = fopen($filename, 'w');
-	fwrite($fp, json_encode($response));
-	fclose($fp);
+            $salesquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
+                    WHERE t.transactionid = td.transactionid 
+                    AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -7 DAY ) 
+                    AND DATE <= CURDATE( )  
+                    AND type = 'sale' 
+                    AND barcode =$barcode;");
+            $salesreq = mysql_fetch_array($salesquery);
+            $salesreq = intval($salesreq[0]);
 
-	return $filename;
+            $writeoffquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
+                    WHERE t.transactionid = td.transactionid 
+                    AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -7 DAY ) 
+                    AND DATE <= CURDATE( )  
+                    AND type = 'write off' 
+                    AND barcode =$barcode;");
+            $writeoffreq = mysql_fetch_array($writeoffquery);
+            $writeoffreq = intval($writeoffreq[0]);
+            
+            if($qtyreq <= 0) {
+                    $qtyreq = 0;
+            }
+            if($status == 1) {
+                    $enc_key = "AXCDSCFDSSXCVSS";
+                    $posts[] = array('barcode'=>$barcode, 'quantity'=>encrypt($qtyreq), 'sales'=>encrypt($salesreq), 'write-off'=>encrypt($writeoffreq));
+            }
+        }
+        
+        $response['products'] = $posts;
+        
+        //name file by shop id from settings file
+        $filename = '1.json';
+        
+        $fp = fopen($filename, 'w');
+        fwrite($fp, json_encode($response));
+        fclose($fp);
+        dbclose($con);
+
+        return $filename;
 }
 
 function postFileToUrl($filename)
@@ -106,10 +127,11 @@ function postFileToUrl($filename)
     //md5 hash it     
     $key  = md5($password);     
       
-	$post = array('id' => '0', 'key' => $key, 'file_contents'=>'@'.$file_name_with_full_path);
+	$post = array('id' => '1', 'key' => $key, 'file_contents'=>'@'.$file_name_with_full_path);
  
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL,$target_url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
 	curl_setopt($ch, CURLOPT_POST,1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 	$result=curl_exec ($ch);
