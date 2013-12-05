@@ -61,6 +61,8 @@ class MainWindow(QtGui.QMainWindow):
     def viewProducts(self):
         self.ui.statusBar.showMessage("Loading Data, please wait...")
         flag = 1
+        headerProducts = ['Barcode', 'Name', 'Category', 'Manufacturer', 'Price per Unit', 'Stock']
+        columnWidth = [75, 250, 125, 125, 100, 75]
         sender = self.sender()
         if sender is not None:
             senderEvent = sender.text()
@@ -84,12 +86,14 @@ class MainWindow(QtGui.QMainWindow):
         else:
             count, rowProduct = getLists.getProductList(0)
         if flag:
-            self.arrayToTable(rowProduct, self.ui.tableWidget_products, count, count, 6)
+            self.arrayToTable(rowProduct, self.ui.tableWidget_products, headerProducts, columnWidth, count, count, 6)
 
     def viewPerishables(self):
         flag = 1
         self.ui.statusBar.showMessage("Loading Data, please wait...")
         sender = self.sender()
+        headerProducts = ['Barcode', 'Name', 'Category', 'Manufacturer', 'Price per Unit', 'Stock']
+        columnWidth = [75, 250, 125, 125, 100, 75]
         if sender is not None:
             senderEvent = sender.text()
             if senderEvent == "View All":
@@ -112,23 +116,27 @@ class MainWindow(QtGui.QMainWindow):
         else:
             count, rowProduct = getLists.getPerishableList(0)
         if flag:
-            self.arrayToTable(rowProduct, self.ui.tableWidget_perishable, count, count, 6)
+            self.arrayToTable(rowProduct, self.ui.tableWidget_perishable, headerProducts, columnWidth, count, count, 6)
 
     def viewTran(self):
         self.ui.statusBar.showMessage("Loading Data, please wait...")
         sender = self.sender()
+        headerTrans = ['Transaction ID', 'Cashier Unit', 'Date', 'Total Bill']
+        headerTransDetail = ['Transaction ID', 'Barcode', 'Promo ID', 'Quantity', 'Type of Transaction']
+        columnWidthTrans = [190, 190, 190, 170]
+        columnWidthTransDetail = [170, 170, 170, 100, 130]
         if sender is not None:
             senderEvent = sender.text()
             if senderEvent == "View All":
                 self.ui.lineEdit_1_tran.clear()
                 self.ui.lineEdit_2_tran.clear()
                 count, rowTran = getLists.getTranList(0)
-                self.arrayToTable(rowTran, self.ui.tableWidget_tran, count, count, 4)
+                self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)
             elif (senderEvent == "Transaction ID") & isNumber(self.ui.lineEdit_1_tran.text()):
                 self.ui.lineEdit_2_tran.clear()
                 idSearch = int(self.ui.lineEdit_1_tran.text())
                 count, rowTran = getLists.getTranList(1, idSearch)
-                self.arrayToTable(rowTran, self.ui.tableWidget_tran, count, count, 5)
+                self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTransDetail, columnWidthTransDetail, count, count, 5)
             elif senderEvent == "Date":
                 self.ui.lineEdit_1_tran.clear()
                 dateSearch = str(self.ui.lineEdit_2_tran.text())
@@ -139,7 +147,7 @@ class MainWindow(QtGui.QMainWindow):
                     dateInput = QtCore.QDate(int(year), int(month), int(day))
                     if dateInput:
                         count, rowTran = getLists.getTranList(2, dateSearch)
-                        self.arrayToTable(rowTran, self.ui.tableWidget_tran, count, count, 4)
+                        self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)
                     else:
                         self.ui.lineEdit_1_tran.clear()
                         self.ui.lineEdit_2_tran.clear()
@@ -154,12 +162,16 @@ class MainWindow(QtGui.QMainWindow):
                 self.ui.statusBar.clearMessage()
         else:
             count, rowTran = getLists.getTranList(0)
-            self.arrayToTable(rowTran, self.ui.tableWidget_tran, count, count, 4)
+            self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)
 
     def viewUnits(self):
         flag = 1
         self.ui.statusBar.showMessage("Loading Data, please wait...")
         sender = self.sender()
+        headerCashier = ['Cashier Unit ID']
+        headerPdu = ['PDU ID', 'Barcode Map']
+        columnCashier = [800]
+        columnPdu = [385, 385]
         if sender is not None:
             senderEvent = sender.text()
             if senderEvent == "View All":
@@ -186,13 +198,15 @@ class MainWindow(QtGui.QMainWindow):
             countCashier, rowCashier = getLists.getCashierList(0)
             countPdu, rowPDUs = getLists.getPDUList(0)
         if flag:
-            self.arrayToTable(rowCashier, self.ui.tableWidget_cashier, countCashier, countCashier, 1)
-            self.arrayToTable(rowPDUs, self.ui.tableWidget_pdu, countPdu, countPdu, 2)
+            self.arrayToTable(rowCashier, self.ui.tableWidget_cashier, headerCashier, columnCashier, countCashier, countCashier, 1)
+            self.arrayToTable(rowPDUs, self.ui.tableWidget_pdu, headerPdu, columnPdu, countPdu, countPdu, 2)
 
     def viewPromo(self):
         flag = 1
         self.ui.statusBar.showMessage("Loading Data, please wait...")
         sender = self.sender()
+        headerPromo = ['Promo ID', 'Barcode', 'Name', 'Unit Price', 'Stock', 'Promotion Bundle Value']
+        columnWidth = [80, 90, 250, 100, 100, 150]
         if sender is not None:
             senderEvent = sender.text()
             if senderEvent == "View All":
@@ -224,7 +238,7 @@ class MainWindow(QtGui.QMainWindow):
         else:
             count, rowPromo = getLists.getPromoList(0)
         if flag:
-            self.arrayToTable(rowPromo, self.ui.tableWidget_promo, count, count, 6)
+            self.arrayToTable(rowPromo, self.ui.tableWidget_promo, headerPromo, columnWidth, count, count, 6)
 
 
     def updateStockAndProduct(self):
@@ -247,9 +261,12 @@ class MainWindow(QtGui.QMainWindow):
     	else:
     		self.ui.statusBar.showMessage("Sending Failed. Check internet connection", 5000)
 
-    def arrayToTable(self, array, qtable, noOfRows, noOfRowsOnce, noOfColumns):
+    def arrayToTable(self, array, qtable, headerLabels, columnWidth, noOfRows, noOfRowsOnce, noOfColumns):
         qtable.setColumnCount(noOfColumns)
         qtable.setRowCount(noOfRowsOnce)
+        qtable.setHorizontalHeaderLabels(headerLabels)
+        for col in range(noOfColumns):
+            qtable.setColumnWidth(col, columnWidth[col])
         for row in range(noOfRowsOnce):
             for column in range(noOfColumns):
                 if array[row][column] is not None:
