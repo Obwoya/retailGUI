@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>359</width>
-    <height>242</height>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Add new unit</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #4287c2;</string>
+   <string notr="true"/>
   </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
@@ -22,12 +22,11 @@
      <x>10</x>
      <y>10</y>
      <width>341</width>
-     <height>221</height>
+     <height>211</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #ffffff;
-font-weight: bold;
+    <string notr="true">
 </string>
    </property>
    <property name="currentIndex">
@@ -37,58 +36,75 @@ font-weight: bold;
     <attribute name="title">
      <string>Add Cashier</string>
     </attribute>
-    <widget class="QWidget" name="formLayoutWidget">
+    <widget class="QPushButton" name="add_cashier">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>140</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Add Cashier</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="cancel">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>140</y>
+       <width>81</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Cancel</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
       <rect>
        <x>30</x>
        <y>20</y>
-       <width>261</width>
-       <height>82</height>
+       <width>271</width>
+       <height>91</height>
       </rect>
      </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     <layout class="QGridLayout" name="gridLayout" columnstretch="50,100,50">
+      <property name="horizontalSpacing">
+       <number>20</number>
       </property>
-      <item row="1" column="0">
+      <property name="verticalSpacing">
+       <number>15</number>
+      </property>
+      <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="styleSheet">
-         <string notr="true">font-size: 13px;
-font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
-font-weight: bold;</string>
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>Person ID</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="person_id">
         <property name="styleSheet">
-         <string notr="true">font-size: 13px;
-font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
-font-weight: bold;</string>
-        </property>
-        <property name="text">
-         <string>Password</string>
+         <string notr="true"/>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="person_id">
-        <property name="styleSheet">
-         <string notr="true">border-radius: 5px;
-height: 30px;
-border: 1px solid #4287c2;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
        <widget class="QLineEdit" name="person_password">
         <property name="styleSheet">
-         <string notr="true">border-radius: 5px;
-height: 30px;
-border: 1px solid #4287c2;</string>
+         <string notr="true"/>
         </property>
         <property name="inputMask">
          <string/>
@@ -98,122 +114,48 @@ border: 1px solid #4287c2;</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="error_Id">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="error_Pwd">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
      </layout>
-    </widget>
-    <widget class="QPushButton" name="button_add_cashier">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>120</y>
-       <width>101</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: #4287c2;
-color: #ffffff;
-font-weight: bold;
-border-radius: 5px;</string>
-     </property>
-     <property name="text">
-      <string>Add Cashier</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="button_cancel">
-     <property name="geometry">
-      <rect>
-       <x>170</x>
-       <y>120</y>
-       <width>101</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(217, 217, 217);
-color: #000000;
-font-weight: bold;
-border-radius: 5px;</string>
-     </property>
-     <property name="text">
-      <string>Cancel</string>
-     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="addPdu">
     <attribute name="title">
      <string>Add Price Display Unit</string>
     </attribute>
-    <widget class="QWidget" name="formLayoutWidget_2">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>20</y>
-       <width>261</width>
-       <height>78</height>
-      </rect>
-     </property>
-     <layout class="QFormLayout" name="formLayout_3">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-      </property>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="styleSheet">
-         <string notr="true">font-size: 13px;
-font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
-font-weight: bold;</string>
-        </property>
-        <property name="text">
-         <string>Device ID</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="styleSheet">
-         <string notr="true">font-size: 13px;
-font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
-font-weight: bold;</string>
-        </property>
-        <property name="text">
-         <string>Barcode</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="device_id">
-        <property name="styleSheet">
-         <string notr="true">border-radius: 5px;
-height: 30px;
-border: 1px solid #4287c2;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="device_barcode">
-        <property name="styleSheet">
-         <string notr="true">border-radius: 5px;
-height: 30px;
-border: 1px solid #4287c2;</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
     <widget class="QPushButton" name="add_pdu">
      <property name="geometry">
       <rect>
-       <x>50</x>
-       <y>120</y>
-       <width>101</width>
-       <height>31</height>
+       <x>80</x>
+       <y>140</y>
+       <width>81</width>
+       <height>23</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: #4287c2;
-color: #ffffff;
-font-weight: bold;
-border-radius: 5px;</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Add PDU</string>
@@ -223,20 +165,83 @@ border-radius: 5px;</string>
      <property name="geometry">
       <rect>
        <x>170</x>
-       <y>120</y>
-       <width>101</width>
-       <height>31</height>
+       <y>140</y>
+       <width>81</width>
+       <height>23</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(217, 217, 217);
-color: #000000;
-font-weight: bold;
-border-radius: 5px;</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Cancel</string>
      </property>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>271</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2" columnstretch="50,100,50">
+      <property name="horizontalSpacing">
+       <number>20</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>15</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Device ID</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="error_Dev">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Barcode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="error_Bar">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="device_barcode">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="device_id">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>
@@ -244,7 +249,7 @@ border-radius: 5px;</string>
  <resources/>
  <connections>
   <connection>
-   <sender>button_cancel</sender>
+   <sender>cancel</sender>
    <signal>clicked()</signal>
    <receiver>NewUnit</receiver>
    <slot>close()</slot>

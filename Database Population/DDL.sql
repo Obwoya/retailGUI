@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `promotion` (
 CREATE TABLE IF NOT EXISTS `cashier` (
 	`id` INT,
 	`pwd` INT NOT NULL,
+	`active` INT DEFAULT 1,
 	PRIMARY KEY (`id`)
 )  ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 

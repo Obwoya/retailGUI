@@ -6,11 +6,11 @@ def getCashierList(option, valueSearch = None):
 	rowCashier = None
 	conn, cur = connectDb.connectToDatabase()
 	if option == 0:
-		countQuery = "SELECT count(*) FROM cashier"
-		resultQuery = "SELECT id FROM cashier"
+		countQuery = "SELECT count(*) FROM cashier WHERE active = 1"
+		resultQuery = "SELECT id FROM cashier WHERE active = 1"
 	elif option == 2:
-		countQuery = "SELECT count(*) FROM cashier WHERE id = %d" % valueSearch
-		resultQuery = "SELECT id FROM cashier WHERE id = %d" % valueSearch
+		countQuery = "SELECT count(*) FROM cashier WHERE active = 1 AND id = %d" % valueSearch
+		resultQuery = "SELECT id FROM cashier WHERE active = 1 AND id = %d" % valueSearch
 	cur.execute(countQuery)
 	count = cur.fetchone()
 	count = count[0]

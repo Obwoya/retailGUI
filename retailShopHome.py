@@ -12,6 +12,9 @@ from MainWindow import Ui_MainWindow
 from addPerishableWidget import AddNewPerishable
 from deletePerishableWidget import DeletePerishable
 from restockPerishableWidget import RestockPerishable
+from updateUnitWidget import RemapUnit
+from addUnitWidget import NewUnit
+from deleteUnitWidget import DeleteUnit
 
 
 def isNumber(s):
@@ -48,6 +51,9 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.viewall_units.clicked.connect(self.viewUnits)
         self.ui.searchbarcode_units.clicked.connect(self.viewUnits)
         self.ui.searchdev_units.clicked.connect(self.viewUnits)
+        self.ui.newunit.clicked.connect(self.addUnits)
+        self.ui.updateunit.clicked.connect(self.updateUnits)
+        self.ui.removeunit.clicked.connect(self.deleteUnits)
 
         self.ui.viewall_promo.clicked.connect(self.viewPromo)
         self.ui.searchbarcode_promo.clicked.connect(self.viewPromo)
@@ -213,6 +219,26 @@ class MainWindow(QtGui.QMainWindow):
                 nameSearch = int(self.ui.lineEdit_2_units.text())
                 countCashier, rowCashier = getLists.getCashierList(2, nameSearch)
                 countPdu, rowPDUs = getLists.getPDUList(2, nameSearch)
+            elif (senderEvent == "Add Cashier"):
+                self.ui.lineEdit_1_units.clear()
+                self.ui.lineEdit_2_units.clear()
+                countCashier, rowCashier = getLists.getCashierList(0)
+                countPdu, rowPDUs = getLists.getPDUList(0)
+            elif (senderEvent == "Add PDU"):
+                self.ui.lineEdit_1_units.clear()
+                self.ui.lineEdit_2_units.clear()
+                countCashier, rowCashier = getLists.getCashierList(0)
+                countPdu, rowPDUs = getLists.getPDUList(0)
+            elif (senderEvent == "Remap PDU"):
+                self.ui.lineEdit_1_units.clear()
+                self.ui.lineEdit_2_units.clear()
+                countCashier, rowCashier = getLists.getCashierList(0)
+                countPdu, rowPDUs = getLists.getPDUList(0)
+            elif (senderEvent == "Delete"):
+                self.ui.lineEdit_1_units.clear()
+                self.ui.lineEdit_2_units.clear()
+                countCashier, rowCashier = getLists.getCashierList(0)
+                countPdu, rowPDUs = getLists.getPDUList(0)
             else:
                 flag = 0
                 self.ui.lineEdit_1_units.clear()
@@ -276,6 +302,18 @@ class MainWindow(QtGui.QMainWindow):
 
     def updatePerishable(self):
         self.child = RestockPerishable(self)
+        self.child.show()
+
+    def addUnits(self):
+        self.child = NewUnit(self)
+        self.child.show()
+
+    def updateUnits(self):
+        self.child = RemapUnit(self)
+        self.child.show()
+
+    def deleteUnits(self):
+        self.child = DeleteUnit(self)
         self.child.show()
 
 
