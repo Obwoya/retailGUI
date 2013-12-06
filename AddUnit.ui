@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NewUnit</class>
+ <widget class="QWidget" name="NewUnit">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>359</width>
+    <height>242</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Add new unit</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #4287c2;</string>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>341</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #ffffff;
+font-weight: bold;
+</string>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="addCashier">
+    <attribute name="title">
+     <string>Add Cashier</string>
+    </attribute>
+    <widget class="QWidget" name="formLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>261</width>
+       <height>82</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="styleSheet">
+         <string notr="true">font-size: 13px;
+font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
+font-weight: bold;</string>
+        </property>
+        <property name="text">
+         <string>Person ID</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="styleSheet">
+         <string notr="true">font-size: 13px;
+font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
+font-weight: bold;</string>
+        </property>
+        <property name="text">
+         <string>Password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="person_id">
+        <property name="styleSheet">
+         <string notr="true">border-radius: 5px;
+height: 30px;
+border: 1px solid #4287c2;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="person_password">
+        <property name="styleSheet">
+         <string notr="true">border-radius: 5px;
+height: 30px;
+border: 1px solid #4287c2;</string>
+        </property>
+        <property name="inputMask">
+         <string/>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="button_add_cashier">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>120</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #4287c2;
+color: #ffffff;
+font-weight: bold;
+border-radius: 5px;</string>
+     </property>
+     <property name="text">
+      <string>Add Cashier</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_cancel">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>120</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(217, 217, 217);
+color: #000000;
+font-weight: bold;
+border-radius: 5px;</string>
+     </property>
+     <property name="text">
+      <string>Cancel</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="addPdu">
+    <attribute name="title">
+     <string>Add Price Display Unit</string>
+    </attribute>
+    <widget class="QWidget" name="formLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>261</width>
+       <height>78</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="styleSheet">
+         <string notr="true">font-size: 13px;
+font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
+font-weight: bold;</string>
+        </property>
+        <property name="text">
+         <string>Device ID</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="styleSheet">
+         <string notr="true">font-size: 13px;
+font-family: &quot;Open Sans&quot;,&quot;lucida grande&quot;,&quot;Segoe UI&quot;,arial,verdana,&quot;lucida sans unicode&quot;,tahoma,sans-serif;
+font-weight: bold;</string>
+        </property>
+        <property name="text">
+         <string>Barcode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="device_id">
+        <property name="styleSheet">
+         <string notr="true">border-radius: 5px;
+height: 30px;
+border: 1px solid #4287c2;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="device_barcode">
+        <property name="styleSheet">
+         <string notr="true">border-radius: 5px;
+height: 30px;
+border: 1px solid #4287c2;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="add_pdu">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>120</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #4287c2;
+color: #ffffff;
+font-weight: bold;
+border-radius: 5px;</string>
+     </property>
+     <property name="text">
+      <string>Add PDU</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pdu_cancel">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>120</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(217, 217, 217);
+color: #000000;
+font-weight: bold;
+border-radius: 5px;</string>
+     </property>
+     <property name="text">
+      <string>Cancel</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>button_cancel</sender>
+   <signal>clicked()</signal>
+   <receiver>NewUnit</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pdu_cancel</sender>
+   <signal>clicked()</signal>
+   <receiver>NewUnit</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

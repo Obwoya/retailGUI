@@ -9,6 +9,9 @@ import getpass
 import hashlib
 from PyQt4 import QtGui, QtCore
 from MainWindow import Ui_MainWindow
+from addPerishableWidget import AddNewPerishable
+from deletePerishableWidget import DeletePerishable
+from restockPerishableWidget import RestockPerishable
 
 
 def isNumber(s):
@@ -34,6 +37,9 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.viewall_perishable.clicked.connect(self.viewPerishables)
         self.ui.searchbarcode_perishable.clicked.connect(self.viewPerishables)
         self.ui.searchname_perishable.clicked.connect(self.viewPerishables)
+        self.ui.add_perishable.clicked.connect(self.addNewPerishable)
+        self.ui.remove_perishable.clicked.connect(self.deletePerishable)
+        self.ui.update_perishable.clicked.connect(self.updatePerishable)
 
         self.ui.viewall_tran.clicked.connect(self.viewTran)
         self.ui.searchid_tran.clicked.connect(self.viewTran)
@@ -79,10 +85,11 @@ class MainWindow(QtGui.QMainWindow):
                 nameSearch = str(self.ui.lineEdit_2_products.text())
                 count, rowProduct = getLists.getProductList(2, nameSearch)
             else:
+                flag = 0
                 self.ui.lineEdit_1_products.clear()
                 self.ui.lineEdit_2_products.clear()
                 self.ui.statusBar.clearMessage()
-                flag = 0
+                QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")
         else:
             count, rowProduct = getLists.getProductList(0)
         if flag:
@@ -96,6 +103,7 @@ class MainWindow(QtGui.QMainWindow):
         columnWidth = [75, 250, 125, 125, 100, 75]
         if sender is not None:
             senderEvent = sender.text()
+
             if senderEvent == "View All":
                 self.ui.lineEdit_1_perishable.clear()
                 self.ui.lineEdit_2_perishable.clear()
@@ -108,11 +116,24 @@ class MainWindow(QtGui.QMainWindow):
                 self.ui.lineEdit_1_perishable.clear()
                 nameSearch = str(self.ui.lineEdit_2_perishable.text())
                 count, rowProduct = getLists.getPerishableList(2, nameSearch)
+            elif senderEvent == "Create New":
+                self.ui.lineEdit_1_perishable.clear()
+                self.ui.lineEdit_2_perishable.clear()
+                count, rowProduct = getLists.getPerishableList(0)
+            elif senderEvent == "Delete":
+                self.ui.lineEdit_1_perishable.clear()
+                self.ui.lineEdit_2_perishable.clear()
+                count, rowProduct = getLists.getPerishableList(0)
+            elif senderEvent == "Restock":
+                self.ui.lineEdit_1_perishable.clear()
+                self.ui.lineEdit_2_perishable.clear()
+                count, rowProduct = getLists.getPerishableList(0)
             else:
+                flag = 0
                 self.ui.lineEdit_1_perishable.clear()
                 self.ui.lineEdit_2_perishable.clear()
                 self.ui.statusBar.clearMessage()
-                flag = 0
+                QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")
         else:
             count, rowProduct = getLists.getPerishableList(0)
         if flag:
@@ -152,14 +173,17 @@ class MainWindow(QtGui.QMainWindow):
                         self.ui.lineEdit_1_tran.clear()
                         self.ui.lineEdit_2_tran.clear()
                         self.ui.statusBar.clearMessage()
+                        QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")
                 else:
                     self.ui.lineEdit_1_tran.clear()
                     self.ui.lineEdit_2_tran.clear()
-                    self.ui.statusBar.clearMessage()                
+                    self.ui.statusBar.clearMessage()
+                    QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")              
             else:
                 self.ui.lineEdit_1_tran.clear()
                 self.ui.lineEdit_2_tran.clear()
                 self.ui.statusBar.clearMessage()
+                QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")
         else:
             count, rowTran = getLists.getTranList(0)
             self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)
@@ -190,10 +214,11 @@ class MainWindow(QtGui.QMainWindow):
                 countCashier, rowCashier = getLists.getCashierList(2, nameSearch)
                 countPdu, rowPDUs = getLists.getPDUList(2, nameSearch)
             else:
+                flag = 0
                 self.ui.lineEdit_1_units.clear()
                 self.ui.lineEdit_2_units.clear()
                 self.ui.statusBar.clearMessage()
-                flag = 0
+                QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")
         else:
             countCashier, rowCashier = getLists.getCashierList(0)
             countPdu, rowPDUs = getLists.getPDUList(0)
@@ -230,15 +255,28 @@ class MainWindow(QtGui.QMainWindow):
                 nameSearch = str(self.ui.lineEdit_3_promo.text())
                 count, rowPromo = getLists.getPromoList(3, nameSearch)
             else:
+                flag = 0
                 self.ui.lineEdit_1_promo.clear()
                 self.ui.lineEdit_2_promo.clear()
                 self.ui.lineEdit_3_promo.clear()
                 self.ui.statusBar.clearMessage()
-                flag = 0
+                QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")
         else:
             count, rowPromo = getLists.getPromoList(0)
         if flag:
             self.arrayToTable(rowPromo, self.ui.tableWidget_promo, headerPromo, columnWidth, count, count, 6)
+
+    def addNewPerishable(self):
+        self.child = AddNewPerishable(self)
+        self.child.show()
+
+    def deletePerishable(self):
+        self.child = DeletePerishable(self)
+        self.child.show()
+
+    def updatePerishable(self):
+        self.child = RestockPerishable(self)
+        self.child.show()
 
 
     def updateStockAndProduct(self):
