@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `promotion` (
 	`type`	  INT NOT NULL,
 	`value`	  INT NOT NULL,
 	`expiry`  DATE,
+	`active` INT DEFAULT 1,
 	PRIMARY KEY (`barcode`, `promoid`),
 	FOREIGN KEY (`barcode`) REFERENCES `product`(`barcode`)
 )  ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

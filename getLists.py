@@ -125,18 +125,18 @@ def getPromoList(option, valueSearch = None):
 	conn, cur = connectDb.connectToDatabase()
 
 	if option == 0:
-		countQuery = "SELECT count(distinct promotion.promoid) FROM product, promotion WHERE product.barcode=promotion.barcode AND product.active=1 AND (ISNULL(promotion.expiry) OR promotion.expiry>CURDATE())"
-		resultQuery = "SELECT distinct pr.promoid, pr.barcode, p.name, p.cost, p.stocklevel, pr.value FROM product p, promotion pr WHERE p.barcode=pr.barcode AND p.active=1 AND (ISNULL(pr.expiry) OR pr.expiry>CURDATE())"
+		countQuery = "SELECT count(distinct promotion.promoid) FROM product, promotion WHERE product.barcode=promotion.barcode AND product.active=1 AND promotion.active=1 AND (ISNULL(promotion.expiry) OR promotion.expiry>CURDATE())"
+		resultQuery = "SELECT distinct pr.promoid, pr.barcode, p.name, p.cost, p.stocklevel, pr.value FROM product p, promotion pr WHERE p.barcode=pr.barcode AND p.active=1 AND pr.active=1 AND (ISNULL(pr.expiry) OR pr.expiry>CURDATE())"
 	elif option == 1:
-		countQuery = "SELECT count(distinct promotion.promoid) FROM product, promotion WHERE product.barcode=promotion.barcode AND product.active=1 AND (ISNULL(promotion.expiry) OR promotion.expiry>CURDATE()) AND product.barcode= %d" % valueSearch
-		resultQuery = "SELECT distinct pr.promoid, pr.barcode, p.name, p.cost, p.stocklevel, pr.value FROM product p, promotion pr WHERE p.barcode=pr.barcode AND p.active=1 AND (ISNULL(pr.expiry) OR pr.expiry>CURDATE()) AND p.barcode= %d" % valueSearch
+		countQuery = "SELECT count(distinct promotion.promoid) FROM product, promotion WHERE product.barcode=promotion.barcode AND product.active=1 AND promotion.active=1 AND (ISNULL(promotion.expiry) OR promotion.expiry>CURDATE()) AND product.barcode= %d" % valueSearch
+		resultQuery = "SELECT distinct pr.promoid, pr.barcode, p.name, p.cost, p.stocklevel, pr.value FROM product p, promotion pr WHERE p.barcode=pr.barcode AND p.active=1 AND pr.active=1 AND (ISNULL(pr.expiry) OR pr.expiry>CURDATE()) AND p.barcode= %d" % valueSearch
 	elif option == 2:
 		countQuery = "SELECT count(distinct promotion.promoid) FROM product, promotion WHERE product.barcode=promotion.barcode AND product.active=1 AND (ISNULL(promotion.expiry) OR promotion.expiry>CURDATE()) AND promotion.promoid= %d" % valueSearch
 		resultQuery = "SELECT distinct pr.promoid, pr.barcode, p.name, p.cost, p.stocklevel, pr.value FROM product p, promotion pr WHERE p.barcode=pr.barcode AND p.active=1 AND (ISNULL(pr.expiry) OR pr.expiry>CURDATE()) AND pr.promoid= %d" % valueSearch
 	elif option == 3:
 		valueSearch = '%' + valueSearch + '%'
-		countQuery = "SELECT count(distinct promotion.promoid) FROM product, promotion WHERE product.barcode=promotion.barcode AND product.active=1 AND (ISNULL(promotion.expiry) OR promotion.expiry>CURDATE()) AND product.name LIKE '%s'" % valueSearch
-		resultQuery = "SELECT distinct pr.promoid, pr.barcode, p.name, p.cost, p.stocklevel, pr.value FROM product p, promotion pr WHERE p.barcode=pr.barcode AND p.active=1 AND (ISNULL(pr.expiry) OR pr.expiry>CURDATE()) AND p.name LIKE '%s'" % valueSearch
+		countQuery = "SELECT count(distinct promotion.promoid) FROM product, promotion WHERE product.barcode=promotion.barcode AND product.active=1 AND promotion.active=1 AND (ISNULL(promotion.expiry) OR promotion.expiry>CURDATE()) AND product.name LIKE '%s'" % valueSearch
+		resultQuery = "SELECT distinct pr.promoid, pr.barcode, p.name, p.cost, p.stocklevel, pr.value FROM product p, promotion pr WHERE p.barcode=pr.barcode AND p.active=1 AND pr.active=1 AND (ISNULL(pr.expiry) OR pr.expiry>CURDATE()) AND p.name LIKE '%s'" % valueSearch
 
 	cur.execute(countQuery)
 	count = cur.fetchone()

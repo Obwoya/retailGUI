@@ -16,6 +16,8 @@ from restockPerishableWidget import RestockPerishable
 from updateUnitWidget import RemapUnit
 from addUnitWidget import NewUnit
 from deleteUnitWidget import DeleteUnit
+from createPromotionWidget import CreatePromotion
+from deletePromotionWidget import DeletePromotion
 
 
 def isNumber(s):
@@ -61,6 +63,8 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.searchbarcode_promo.clicked.connect(self.viewPromo)
         self.ui.searchname_promo.clicked.connect(self.viewPromo)
         self.ui.searchpromo_promo.clicked.connect(self.viewPromo)
+        self.ui.newpromo.clicked.connect(self.createPromo)
+        self.ui.removepromo.clicked.connect(self.deletePromo)
 
         self.ui.orderproducts.clicked.connect(self.orderProducts)
         self.ui.updatestock.clicked.connect(self.updateStockAndProduct)
@@ -286,6 +290,16 @@ class MainWindow(QtGui.QMainWindow):
                 self.ui.lineEdit_2_promo.clear()
                 nameSearch = str(self.ui.lineEdit_3_promo.text())
                 count, rowPromo = getLists.getPromoList(3, nameSearch)
+            elif senderEvent == "Create":
+                self.ui.lineEdit_1_promo.clear()
+                self.ui.lineEdit_2_promo.clear()
+                self.ui.lineEdit_3_promo.clear()
+                count, rowPromo = getLists.getPromoList(0)
+            elif senderEvent == "Delete":
+                self.ui.lineEdit_1_promo.clear()
+                self.ui.lineEdit_2_promo.clear()
+                self.ui.lineEdit_3_promo.clear()
+                count, rowPromo = getLists.getPromoList(0)
             else:
                 flag = 0
                 self.ui.lineEdit_1_promo.clear()
@@ -324,6 +338,14 @@ class MainWindow(QtGui.QMainWindow):
 
     def deleteUnits(self):
         self.child = DeleteUnit(self)
+        self.child.show()
+
+    def createPromo(self):
+        self.child = CreatePromotion(self)
+        self.child.show()
+
+    def deletePromo(self):
+        self.child = DeletePromotion(self)
         self.child.show()
 
 
