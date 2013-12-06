@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindow.ui'
 #
-# Created: Fri Dec 06 00:43:48 2013
+# Created: Sat Dec 07 03:27:18 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -102,12 +102,15 @@ class Ui_MainWindow(object):
         self.add_perishable = QtGui.QPushButton(self.tab_3)
         self.add_perishable.setGeometry(QtCore.QRect(10, 10, 111, 23))
         self.add_perishable.setObjectName(_fromUtf8("add_perishable"))
-        self.update_perishable = QtGui.QPushButton(self.tab_3)
-        self.update_perishable.setGeometry(QtCore.QRect(720, 10, 111, 23))
-        self.update_perishable.setObjectName(_fromUtf8("update_perishable"))
+        self.stock_perishable = QtGui.QPushButton(self.tab_3)
+        self.stock_perishable.setGeometry(QtCore.QRect(720, 10, 111, 23))
+        self.stock_perishable.setObjectName(_fromUtf8("stock_perishable"))
         self.remove_perishable = QtGui.QPushButton(self.tab_3)
-        self.remove_perishable.setGeometry(QtCore.QRect(180, 10, 111, 23))
+        self.remove_perishable.setGeometry(QtCore.QRect(290, 10, 111, 23))
         self.remove_perishable.setObjectName(_fromUtf8("remove_perishable"))
+        self.update_perishable = QtGui.QPushButton(self.tab_3)
+        self.update_perishable.setGeometry(QtCore.QRect(150, 10, 111, 23))
+        self.update_perishable.setObjectName(_fromUtf8("update_perishable"))
         self.tabWidget.addTab(self.tab_3, _fromUtf8(""))
         self.tab_4 = QtGui.QWidget()
         self.tab_4.setObjectName(_fromUtf8("tab_4"))
@@ -274,8 +277,9 @@ class Ui_MainWindow(object):
         self.next_perishable.setText(_translate("MainWindow", "Next", None))
         self.previous_perishable.setText(_translate("MainWindow", "Previous", None))
         self.add_perishable.setText(_translate("MainWindow", "Add New Product", None))
-        self.update_perishable.setText(_translate("MainWindow", "Restock Product", None))
+        self.stock_perishable.setText(_translate("MainWindow", "Restock Product", None))
         self.remove_perishable.setText(_translate("MainWindow", "Delete Product", None))
+        self.update_perishable.setText(_translate("MainWindow", "Update Product", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Perishable Products", None))
         self.searchid_tran.setText(_translate("MainWindow", "Transaction ID", None))
         self.searchdate_tran.setText(_translate("MainWindow", "Date", None))

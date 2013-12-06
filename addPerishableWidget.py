@@ -34,7 +34,7 @@ class AddNewPerishable(QtGui.QWidget):
     	self.ui.error_Name.clear()
     	flag = self.validateInput(barcode, name, category, manu, price, stock, expiry)
 
-    	if flag != 0:
+    	if flag != 0 & (len(str(barcode)) == 8):
     		year = expiry[:4]
     		month = expiry[5:7]
     		day = expiry[8:]
@@ -93,7 +93,7 @@ class AddNewPerishable(QtGui.QWidget):
 
     def validateInput(self, barcode, name, category, manu, price, stock, expiry):
     	flag = 1
-    	if len(str(barcode)) > 0:
+    	if len(str(barcode)) == 8:
     		if isNumber(barcode):
     			barcode = int(barcode)
     		else:
@@ -101,7 +101,7 @@ class AddNewPerishable(QtGui.QWidget):
     			self.ui.error_Barcode.setText("*incorrect input")
     	else:
     		flag = 0
-    		self.ui.error_Barcode.setText("*required")
+    		self.ui.error_Barcode.setText("*incorrect input")
 
     	if len(str(price)) > 0:
     		if isNumber(price):

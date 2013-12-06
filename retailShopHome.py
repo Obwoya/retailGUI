@@ -11,6 +11,7 @@ from PyQt4 import QtGui, QtCore
 from MainWindow import Ui_MainWindow
 from addPerishableWidget import AddNewPerishable
 from deletePerishableWidget import DeletePerishable
+from updatePerishableWidget import UpdatePerishable
 from restockPerishableWidget import RestockPerishable
 from updateUnitWidget import RemapUnit
 from addUnitWidget import NewUnit
@@ -42,6 +43,7 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.searchname_perishable.clicked.connect(self.viewPerishables)
         self.ui.add_perishable.clicked.connect(self.addNewPerishable)
         self.ui.remove_perishable.clicked.connect(self.deletePerishable)
+        self.ui.stock_perishable.clicked.connect(self.restockPerishable)
         self.ui.update_perishable.clicked.connect(self.updatePerishable)
 
         self.ui.viewall_tran.clicked.connect(self.viewTran)
@@ -131,6 +133,10 @@ class MainWindow(QtGui.QMainWindow):
                 self.ui.lineEdit_2_perishable.clear()
                 count, rowProduct = getLists.getPerishableList(0)
             elif senderEvent == "Restock":
+                self.ui.lineEdit_1_perishable.clear()
+                self.ui.lineEdit_2_perishable.clear()
+                count, rowProduct = getLists.getPerishableList(0)
+            elif senderEvent == "Update":
                 self.ui.lineEdit_1_perishable.clear()
                 self.ui.lineEdit_2_perishable.clear()
                 count, rowProduct = getLists.getPerishableList(0)
@@ -300,8 +306,12 @@ class MainWindow(QtGui.QMainWindow):
         self.child = DeletePerishable(self)
         self.child.show()
 
-    def updatePerishable(self):
+    def restockPerishable(self):
         self.child = RestockPerishable(self)
+        self.child.show()
+
+    def updatePerishable(self):
+        self.child = UpdatePerishable(self)
         self.child.show()
 
     def addUnits(self):
