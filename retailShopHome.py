@@ -176,7 +176,7 @@ class MainWindow(QtGui.QMainWindow):
         sender = self.sender()
         if sender is not None:
             senderEvent = sender.text()
-            if senderEvent == "Refresh":
+            if (senderEvent == "Refresh") | (senderEvent == "Transaction"):
                 count, rowProduct = self.getProducts(0)
             elif (senderEvent == "Filter Barcode") & isNumber(self.ui.lineEdit_1_products.text()):
                 barcodeSearch = int(self.ui.lineEdit_1_products.text())
@@ -222,6 +222,8 @@ class MainWindow(QtGui.QMainWindow):
             elif senderEvent == "Restock":
                 count, rowProduct = self.getPerish(0)
             elif senderEvent == "Update":
+                count, rowProduct = self.getPerish(0)
+            elif senderEvent == "Transaction":
                 count, rowProduct = self.getPerish(0)
             else:
                 flag = 0
@@ -315,6 +317,8 @@ class MainWindow(QtGui.QMainWindow):
                 countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
             elif (senderEvent == "Delete"):
                 countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
+            elif (senderEvent == "Transaction"):
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
             else:
                 flag = 0
                 self.ui.lineEdit_1_units.clear()
@@ -353,6 +357,8 @@ class MainWindow(QtGui.QMainWindow):
             elif senderEvent == "Create":
                 count, rowPromo = self.getPromos(0)
             elif senderEvent == "Delete":
+                count, rowPromo = self.getPromos(0)
+            elif senderEvent == "Transaction":
                 count, rowPromo = self.getPromos(0)
             else:
                 flag = 0
@@ -416,13 +422,13 @@ class MainWindow(QtGui.QMainWindow):
 
     def updateStockAndProduct(self):
         self.ui.statusBar.showMessage("Checking for Data, please wait...")
-    	data = retrieveRegional.downloadFileFromRegional(1, hashlib.md5("helloworld".encode()))
+        proc = subprocess.Popen("php decryptData.php", shell=True, stdout=subprocess.PIPE)
+        script_response = proc.stdout.read()
         self.ui.statusBar.clearMessage()
-    	if data is None:
-    		self.ui.statusBar.showMessage("Failed to download. Check internet connection", 5000)
+    	if "finished" in script_response:
+            self.ui.statusBar.showMessage("Product List was successfully updated and re-stocked", 5000)
     	else:
-    		retrieveRegional.processJSON(data)
-    		self.ui.statusBar.showMessage("Product List was successfully updated and re-stocked", 5000)
+    		self.ui.statusBar.showMessage("Failed to download. Check internet connection", 5000)
 
     def orderProducts(self):
         self.ui.statusBar.showMessage("Sending Data, please wait...")

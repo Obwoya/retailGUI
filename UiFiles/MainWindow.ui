@@ -94,16 +94,6 @@
           <string/>
          </property>
         </widget>
-        <widget class="QGraphicsView" name="graphicsView">
-         <property name="geometry">
-          <rect>
-           <x>70</x>
-           <y>220</y>
-           <width>651</width>
-           <height>261</height>
-          </rect>
-         </property>
-        </widget>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">

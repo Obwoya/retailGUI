@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'UiFiles\MainWindow.ui'
 #
-# Created: Sat Dec 07 17:17:48 2013
+# Created: Sun Dec 08 05:26:20 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -56,9 +56,6 @@ class Ui_MainWindow(object):
         self.noItems.setGeometry(QtCore.QRect(570, 120, 201, 16))
         self.noItems.setText(_fromUtf8(""))
         self.noItems.setObjectName(_fromUtf8("noItems"))
-        self.graphicsView = QtGui.QGraphicsView(self.tab_1)
-        self.graphicsView.setGeometry(QtCore.QRect(70, 220, 651, 261))
-        self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
         self.tabWidget.addTab(self.tab_1, _fromUtf8(""))
         self.tab_2 = QtGui.QWidget()
         self.tab_2.setObjectName(_fromUtf8("tab_2"))

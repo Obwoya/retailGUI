@@ -4,6 +4,7 @@ function dbconnect()
 {
 	$con = mysql_connect("localhost", "yatish", "null");
 	mysql_select_db("3002local", $con);
+	ini_set('max_execution_time', 600);
 	if(!$con)
 	{
 		die("Connection Failed!");
@@ -11,11 +12,6 @@ function dbconnect()
 	else{
 		return $con;
 	}
-}
-
-function dbclose($con)
-{
-	mysql_close($con);
 }
 
 //call to encrpt
@@ -58,71 +54,50 @@ function decode_base64($sData){
 function createJson()
 {
 	$con = dbconnect();
+	$qtyreq = 5;
 	$posts = array();
 	$response = array();
 	$query = mysql_query("SELECT barcode FROM product");
 	while($row = mysql_fetch_array($query))
 	{
-		$barcode = $row['barcode'];
-		$qtyquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
-			WHERE t.transactionid = td.transactionid 
-			AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -21 DAY ) 
-			AND DATE <= CURDATE( )  
-			AND type = 'sale' 
-			AND barcode =$barcode;");
-		$qtyreq = mysql_fetch_array($qtyquery);
-		$qtyreq = intval($qtyreq[0])/3;
-		$qtyreq = intval($qtyreq);
+	$barcode = $row['barcode'];
 
-		$holdingquery = mysql_query("SELECT stocklevel, active FROM product WHERE barcode = $barcode");
-		$holdreq = mysql_fetch_array($holdingquery);
-		$holdingreq = intval($holdreq[0]);
-		$status = intval($holdreq[1]);
-		$qtyreq = $qtyreq - $holdingreq;
-
-		$salesquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
-			WHERE t.transactionid = td.transactionid 
-			AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -7 DAY ) 
-			AND DATE <= CURDATE( )  
-			AND type = 'sale' 
+	$checkIfTrans = mysql_query("SELECT count(*) FROM TransactionDetails td, Transaction t 
+			WHERE t.transactionID = td.transactionID 
+			AND t.DATE = CURDATE()   
 			AND barcode =$barcode;");
-		$salesreq = mysql_fetch_array($salesquery);
-		$salesreq = intval($salesreq[0]);
+	$isThereAny = mysql_fetch_array($checkIfTrans);
+	$isThereAny = $isThereAny[0];
+	if ($isThereAny > 0) {
+		$qtyquery = mysql_query("SELECT SUM( unitsold ) FROM TransactionDetails td, Transaction t 
+				WHERE t.transactionID = td.transactionID 
+				AND t.DATE = CURDATE( )   
+				AND barcode =$barcode;");
+		$qtySold = mysql_fetch_row($qtyquery);
+		$qtySold = $qtySold[0];
 
-		$writeoffquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
-			WHERE t.transactionid = td.transactionid 
-			AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -7 DAY ) 
-			AND DATE <= CURDATE( )  
-			AND type = 'write off' 
-			AND barcode =$barcode;");
-		$writeoffreq = mysql_fetch_array($writeoffquery);
-		$writeoffreq = intval($writeoffreq[0]);
+		$qtyreq = $qtySold;
 		
-		if($qtyreq <= 0) {
-			$qtyreq = 0;
-		}
-		if($status == 1) {
-			$enc_key = "AXCDSCFDSSXCVSS";
-			$posts[] = array('barcode'=>$barcode, 'quantity'=>encrypt($qtyreq), 'sales'=>encrypt($salesreq), 'write-off'=>encrypt($writeoffreq));
+		$enc_key = "AXCDSCFDSSXCVSS";
+		$posts[] = array('barcode'=>$barcode, 'quantity'=>encrypt($qtyreq));
 		}
 	}
 	
 	$response['products'] = $posts;
 	
 	//name file by shop id from settings file
-	$filename = '1.json';
+	$filename = '0.json';
 	
 	$fp = fopen($filename, 'w');
 	fwrite($fp, json_encode($response));
 	fclose($fp);
-	dbclose($con);
 
 	return $filename;
 }
 
 function postFileToUrl($filename)
 {
-	$target_url = 'http://cg3002-20-z.comp.nus.edu.sg/api/upload.php';
+	$target_url = 'http://172.28.180.133/api/upload.php';
         //This needs to be the full path to the file you want to send.
 	$file_name_with_full_path = './'.$filename;
 
@@ -131,7 +106,7 @@ function postFileToUrl($filename)
     //md5 hash it     
     $key  = md5($password);     
       
-	$post = array('id' => '1', 'key' => $key, 'file_contents'=>'@'.$file_name_with_full_path);
+	$post = array('id' => '0', 'key' => $key, 'file_contents'=>'@'.$file_name_with_full_path);
  
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL,$target_url);
@@ -143,9 +118,76 @@ function postFileToUrl($filename)
 	echo $result;
 }
 
+
 function sendData()
 {
 	postFileToUrl(createJson());
 }
 
+function invert($num)
+{
+	if($num == 0){
+		$num = 1;
+	} else {
+		$num = 0;
+	}
+	return $num;
+}
+
+
+function getData() {
+	$url = 'http://cg3002-20-z.comp.nus.edu.sg/api/download/1-fc5e038d38a57032085441e7fe7010b0.json';
+	$con = dbconnect();
+	//$url = 'http://localhost/3002local/0-fc5e038d38a57032085441e7fe7010b0.json';
+	$json = file_get_contents($url);
+	$data = json_decode($json, true);
+	
+	foreach($data['product_list'] as $product) 
+	{
+		$barcode = ($product['barcode']);
+		$name = decrypt($product['name']);
+		$category = decrypt($product['category']);
+		$manufacturer = decrypt($product['manufacturer']);
+		$price = round(decrypt($product['costprice']), 2);
+		$active = invert(decrypt($product['deleted']));
+	
+		$query = mysql_query("SELECT count(*) FROM Product WHERE barcode='$barcode'");
+		$count = mysql_fetch_row($query);
+		$count = $count[0];
+		if($count > 0)
+		{
+			$query = mysql_query("SELECT count(*) FROM Product WHERE barcode=$barcode AND name='$name' AND category='$category' AND manufacturer='$manufacturer' AND cost=$price AND active=$active");
+			$requireUpdation = mysql_fetch_row($query);
+			$requireUpdation = $requireUpdation[0];
+			if($requireUpdation == 0)
+			{
+				mysql_query("UPDATE Product SET name='$name', category='$category', manufacturer='$manufacturer', cost=$price, active=$active WHERE barcode=$barcode");
+				//echo "UPDATE Product SET name='$name', category='$category', manufacturer='$manufacturer', cost=$price, active=$active WHERE barcode=$barcode"."<br>";
+			}
+			else
+			{
+				//echo "Not added"."<br>";
+			}
+		}
+		else
+		{
+			mysql_query("INSERT INTO Product(barcode,name,category,manufacturer,cost,stocklevel,active) VALUES ($barcode,'$name','$category','$manufacturer',$price,0,$active)");
+			//echo "INSERT INTO Product(barcode,name,category,manufacturer,cost,stocklevel,active) VALUES ($barcode,'$name','$category','$manufacturer',$price,0,$active)"."<br>";
+		}			
+	}
+	echo "finished product list";
+	
+	foreach($data['shipment_list'] as $ship) 
+	{
+		$barcode = ($ship['barcode']);
+		$quantity = decrypt($ship['quantity']);
+	
+		$query = mysql_query("SELECT * FROM Product WHERE barcode=$barcode");
+		if(mysql_num_rows($query) > 0)
+		{
+			mysql_query("UPDATE Product SET quantity=$quantity WHERE barcode=$barcode");
+		}			
+	}
+	echo "finished shipping list";
+}
 ?>

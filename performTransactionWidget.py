@@ -132,7 +132,7 @@ class PerformTransaction(QtGui.QWidget):
                             cur.execute("INSERT INTO transactiondetails VALUES(%d, %d, %d, %d,'sale');" % (tid,barcode,promoid,qty))
                         cur.execute("UPDATE product SET stocklevel = stocklevel - %d WHERE barcode=%d;" % (qty,barcode))
                     conn.commit()
-                    self.parent.viewTran()
+                    self.parent.initialiseAllViews()
                     self.close()
 
                 else:
