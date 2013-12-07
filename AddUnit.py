@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'AddUnit.ui'
+# Form implementation generated from reading ui file 'UiFiles\AddUnit.ui'
 #
-# Created: Sat Dec 07 01:48:38 2013
+# Created: Sat Dec 07 18:10:52 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,12 +26,11 @@ except AttributeError:
 class Ui_NewUnit(object):
     def setupUi(self, NewUnit):
         NewUnit.setObjectName(_fromUtf8("NewUnit"))
-        NewUnit.resize(359, 226)
+        NewUnit.resize(359, 230)
         NewUnit.setStyleSheet(_fromUtf8(""))
         self.tabWidget = QtGui.QTabWidget(NewUnit)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 341, 211))
-        self.tabWidget.setStyleSheet(_fromUtf8("\n"
-""))
+        self.tabWidget.setStyleSheet(_fromUtf8(""))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.addCashier = QtGui.QWidget()
         self.addCashier.setObjectName(_fromUtf8("addCashier"))
@@ -92,7 +91,7 @@ class Ui_NewUnit(object):
         self.pdu_cancel.setStyleSheet(_fromUtf8(""))
         self.pdu_cancel.setObjectName(_fromUtf8("pdu_cancel"))
         self.gridLayoutWidget_2 = QtGui.QWidget(self.addPdu)
-        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(30, 20, 271, 91))
+        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(30, 20, 271, 111))
         self.gridLayoutWidget_2.setObjectName(_fromUtf8("gridLayoutWidget_2"))
         self.gridLayout_2 = QtGui.QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout_2.setMargin(0)
@@ -111,18 +110,30 @@ class Ui_NewUnit(object):
         self.label_6.setStyleSheet(_fromUtf8(""))
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.gridLayout_2.addWidget(self.label_6, 1, 0, 1, 1)
-        self.error_Bar = QtGui.QLabel(self.gridLayoutWidget_2)
-        self.error_Bar.setText(_fromUtf8(""))
-        self.error_Bar.setObjectName(_fromUtf8("error_Bar"))
-        self.gridLayout_2.addWidget(self.error_Bar, 1, 2, 1, 1)
-        self.device_barcode = QtGui.QLineEdit(self.gridLayoutWidget_2)
-        self.device_barcode.setStyleSheet(_fromUtf8(""))
-        self.device_barcode.setObjectName(_fromUtf8("device_barcode"))
-        self.gridLayout_2.addWidget(self.device_barcode, 1, 1, 1, 1)
+        self.error_Port = QtGui.QLabel(self.gridLayoutWidget_2)
+        self.error_Port.setText(_fromUtf8(""))
+        self.error_Port.setObjectName(_fromUtf8("error_Port"))
+        self.gridLayout_2.addWidget(self.error_Port, 1, 2, 1, 1)
+        self.device_port = QtGui.QLineEdit(self.gridLayoutWidget_2)
+        self.device_port.setStyleSheet(_fromUtf8(""))
+        self.device_port.setObjectName(_fromUtf8("device_port"))
+        self.gridLayout_2.addWidget(self.device_port, 1, 1, 1, 1)
         self.device_id = QtGui.QLineEdit(self.gridLayoutWidget_2)
         self.device_id.setStyleSheet(_fromUtf8(""))
         self.device_id.setObjectName(_fromUtf8("device_id"))
         self.gridLayout_2.addWidget(self.device_id, 0, 1, 1, 1)
+        self.error_Bar = QtGui.QLabel(self.gridLayoutWidget_2)
+        self.error_Bar.setText(_fromUtf8(""))
+        self.error_Bar.setObjectName(_fromUtf8("error_Bar"))
+        self.gridLayout_2.addWidget(self.error_Bar, 2, 2, 1, 1)
+        self.device_barcode = QtGui.QLineEdit(self.gridLayoutWidget_2)
+        self.device_barcode.setStyleSheet(_fromUtf8(""))
+        self.device_barcode.setObjectName(_fromUtf8("device_barcode"))
+        self.gridLayout_2.addWidget(self.device_barcode, 2, 1, 1, 1)
+        self.label_7 = QtGui.QLabel(self.gridLayoutWidget_2)
+        self.label_7.setStyleSheet(_fromUtf8(""))
+        self.label_7.setObjectName(_fromUtf8("label_7"))
+        self.gridLayout_2.addWidget(self.label_7, 2, 0, 1, 1)
         self.gridLayout_2.setColumnStretch(0, 50)
         self.gridLayout_2.setColumnStretch(1, 100)
         self.gridLayout_2.setColumnStretch(2, 50)
@@ -144,6 +155,7 @@ class Ui_NewUnit(object):
         self.add_pdu.setText(_translate("NewUnit", "Add PDU", None))
         self.pdu_cancel.setText(_translate("NewUnit", "Cancel", None))
         self.label_5.setText(_translate("NewUnit", "Device ID", None))
-        self.label_6.setText(_translate("NewUnit", "Barcode", None))
+        self.label_6.setText(_translate("NewUnit", "Port", None))
+        self.label_7.setText(_translate("NewUnit", "Barcode", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.addPdu), _translate("NewUnit", "Add Price Display Unit", None))
 

@@ -66,7 +66,8 @@ CREATE TABLE IF NOT EXISTS `manager` (
 
 CREATE TABLE IF NOT EXISTS `pdumap` (
 	`id` BIGINT,
+	`port` INT,
 	`barcode` BIGINT UNSIGNED NOT NULL,
-	PRIMARY KEY (`id`),
+	PRIMARY KEY (`id`, `port`),
 	FOREIGN KEY (`barcode`) REFERENCES `product`(`barcode`)
 )  ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

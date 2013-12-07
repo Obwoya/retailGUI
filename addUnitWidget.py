@@ -76,16 +76,19 @@ class NewUnit(QtGui.QWidget):
     def addPdu(self):
         self.ui.error_Dev.clear()
         self.ui.error_Bar.clear()
+        self.ui.error_Port.clear()
         did = self.ui.device_id.text()
+        port = self.ui.device_port.text()
         barcode = self.ui.device_barcode.text()
 
-        if (len(str(did))>0) & (len(str(barcode))>0):
-            if isNumber(did) & isNumber(barcode) & (len(str(barcode)) == 8):
+        if (len(str(did))>0) & (len(str(barcode))>0) & (len(str(port))>0):
+            if isNumber(did) & isNumber(barcode) & (len(str(barcode)) == 8) & isNumber(port):
                 did = int(did)
                 barcode = int(barcode)
-                if did<65536 & did>0:
+                port = int(port)
+                if (did<=65536) & (did>=0) & (port>=0) & (port<8):
                     conn, cur = connectDb.connectToDatabase()
-                    checkForExistence = "SELECT count(*) FROM pdumap WHERE pdumap.id = %d ;" % did
+                    checkForExistence = "SELECT count(*) FROM pdumap WHERE pdumap.id = %d AND pdumap.port = %d;" % (did, port)
                     cur.execute(checkForExistence)
                     count = cur.fetchone()
                     count = count[0]
@@ -99,7 +102,7 @@ class NewUnit(QtGui.QWidget):
                         countProd = cur.fetchone()
                         countProd = countProd[0]
                         if countProd == 1:
-                            insertQuery = "INSERT INTO pdumap VALUES(%d, %d)" % (did, barcode)
+                            insertQuery = "INSERT INTO pdumap(id, port, barcode) VALUES(%d, %d, %d)" % (did, port, barcode)
                             cur.execute(insertQuery)
                             conn.commit()
                             self.parent.viewUnits()
@@ -109,30 +112,51 @@ class NewUnit(QtGui.QWidget):
                             self.ui.error_Bar.setText("*barcode does not exist")
                     else:
                         self.ui.device_id.clear()
+                        self.ui.device_port.clear()
                         self.ui.device_barcode.clear()
                         self.ui.error_Dev.setText("*device exists")
                     connectDb.closeDatabaseConnection(conn, cur)
                     self.parent.viewUnits()
                 else:
-                    self.ui.device_id.clear()
-                    self.ui.device_barcode.clear()
-                    self.ui.error_Dev.setText("*id must be <65536")
+                    if not ((did<65536) & (did>0)):
+                        self.ui.device_id.clear()
+                        self.ui.device_port.clear()
+                        self.ui.device_barcode.clear()
+                        self.ui.error_Dev.setText("*id must be <65536")
+                    if not ((port<8) & (port>=0)):
+                        self.ui.device_id.clear()
+                        self.ui.device_port.clear()
+                        self.ui.device_barcode.clear()
+                        self.ui.error_Port.setText("*port must be btw 0-7")
             else:
                 if not isNumber(did):
                     self.ui.device_id.clear()
+                    self.ui.device_port.clear()
+                    self.ui.device_barcode.clear()
+                    self.ui.error_Dev.setText("*incorrect input")
+                if not isNumber(port):
+                    self.ui.device_id.clear()
+                    self.ui.device_port.clear()
                     self.ui.device_barcode.clear()
                     self.ui.error_Dev.setText("*incorrect input")
                 if not isNumber(barcode):
                     self.ui.device_id.clear()
+                    self.ui.device_port.clear()
                     self.ui.device_barcode.clear()
                     self.ui.error_Bar.setText("*incorrect input")
                 if (len(str(barcode)) != 8):
                     self.ui.device_id.clear()
+                    self.ui.device_port.clear()
                     self.ui.device_barcode.clear()
                     self.ui.error_Bar.setText("*incorrect input")
         else:
             if len(str(did)) == 0:
                 self.ui.device_id.clear()
+                self.ui.device_port.clear()
+                self.ui.device_barcode.clear()
+                self.ui.error_Dev.setText("*required")
+            if len(str(port)) == 0:
+                self.ui.device_port.clear()
                 self.ui.device_barcode.clear()
                 self.ui.error_Dev.setText("*required")
             if len(str(barcode)) == 0:

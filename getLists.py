@@ -27,13 +27,13 @@ def getPDUList(option, valueSearch = None):
 	conn, cur = connectDb.connectToDatabase()
 	if option == 0:
 		countQuery = "SELECT count(*) FROM pdumap"
-		resultQuery = "SELECT * FROM pdumap"
+		resultQuery = "SELECT id, port, barcode FROM pdumap"
 	elif option == 1:
 		countQuery = "SELECT count(*) FROM pdumap WHERE barcode = %d" % valueSearch
-		resultQuery = "SELECT * FROM pdumap WHERE barcode = %d" % valueSearch
+		resultQuery = "SELECT id, port, barcode FROM pdumap WHERE barcode = %d" % valueSearch
 	elif option == 2:
 		countQuery = "SELECT count(*) FROM pdumap WHERE id = %d" % valueSearch
-		resultQuery = "SELECT * FROM pdumap WHERE id = %d" % valueSearch
+		resultQuery = "SELECT id, port, barcode FROM pdumap WHERE id = %d" % valueSearch
 	cur.execute(countQuery)
 	count = cur.fetchone()
 	count = count[0]

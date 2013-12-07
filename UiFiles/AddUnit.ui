@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>359</width>
-    <height>226</height>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,8 +26,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">
-</string>
+    <string notr="true"/>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -183,7 +182,7 @@
        <x>30</x>
        <y>20</y>
        <width>271</width>
-       <height>91</height>
+       <height>111</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_2" columnstretch="50,100,50">
@@ -216,19 +215,19 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Barcode</string>
+         <string>Port</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QLabel" name="error_Bar">
+       <widget class="QLabel" name="error_Port">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="device_barcode">
+       <widget class="QLineEdit" name="device_port">
         <property name="styleSheet">
          <string notr="true"/>
         </property>
@@ -238,6 +237,30 @@
        <widget class="QLineEdit" name="device_id">
         <property name="styleSheet">
          <string notr="true"/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="error_Bar">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="device_barcode">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Barcode</string>
         </property>
        </widget>
       </item>

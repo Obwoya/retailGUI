@@ -294,9 +294,9 @@ class MainWindow(QtGui.QMainWindow):
         self.dashboard()
         sender = self.sender()
         headerCashier = ['Cashier Unit ID']
-        headerPdu = ['PDU ID', 'Barcode Map']
+        headerPdu = ['PDU ID', 'Port', 'Barcode Map']
         columnCashier = [800]
-        columnPdu = [385, 385]
+        columnPdu = [260, 260, 260]
         if sender is not None:
             senderEvent = sender.text()
             if senderEvent == "Refresh":
@@ -326,7 +326,7 @@ class MainWindow(QtGui.QMainWindow):
             countPdu, rowPDUs = getLists.getPDUList(0)
         if flag:
             self.arrayToTable(rowCashier, self.ui.tableWidget_cashier, headerCashier, columnCashier, countCashier, countCashier, 1)
-            self.arrayToTable(rowPDUs, self.ui.tableWidget_pdu, headerPdu, columnPdu, countPdu, countPdu, 2)
+            self.arrayToTable(rowPDUs, self.ui.tableWidget_pdu, headerPdu, columnPdu, countPdu, countPdu, 3)
         if (countCashier == 0) & (countPdu == 0):
             self.ui.statusBar.showMessage("No Results Found", 2000)
 
