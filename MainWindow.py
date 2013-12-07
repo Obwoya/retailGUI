@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'MainWindow.ui'
+# Form implementation generated from reading ui file 'UiFiles\MainWindow.ui'
 #
-# Created: Sat Dec 07 03:27:18 2013
+# Created: Sat Dec 07 10:58:17 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -115,24 +115,24 @@ class Ui_MainWindow(object):
         self.tab_4 = QtGui.QWidget()
         self.tab_4.setObjectName(_fromUtf8("tab_4"))
         self.searchid_tran = QtGui.QPushButton(self.tab_4)
-        self.searchid_tran.setGeometry(QtCore.QRect(200, 10, 91, 23))
+        self.searchid_tran.setGeometry(QtCore.QRect(200, 50, 91, 23))
         self.searchid_tran.setObjectName(_fromUtf8("searchid_tran"))
         self.searchdate_tran = QtGui.QPushButton(self.tab_4)
-        self.searchdate_tran.setGeometry(QtCore.QRect(500, 10, 75, 23))
+        self.searchdate_tran.setGeometry(QtCore.QRect(500, 50, 75, 23))
         self.searchdate_tran.setObjectName(_fromUtf8("searchdate_tran"))
         self.tableWidget_tran = QtGui.QTableWidget(self.tab_4)
-        self.tableWidget_tran.setGeometry(QtCore.QRect(10, 50, 821, 451))
+        self.tableWidget_tran.setGeometry(QtCore.QRect(10, 80, 821, 421))
         self.tableWidget_tran.setObjectName(_fromUtf8("tableWidget_tran"))
         self.tableWidget_tran.setColumnCount(0)
         self.tableWidget_tran.setRowCount(0)
         self.viewall_tran = QtGui.QPushButton(self.tab_4)
-        self.viewall_tran.setGeometry(QtCore.QRect(760, 10, 75, 23))
+        self.viewall_tran.setGeometry(QtCore.QRect(760, 50, 75, 23))
         self.viewall_tran.setObjectName(_fromUtf8("viewall_tran"))
         self.lineEdit_2_tran = QtGui.QLineEdit(self.tab_4)
-        self.lineEdit_2_tran.setGeometry(QtCore.QRect(340, 10, 141, 20))
+        self.lineEdit_2_tran.setGeometry(QtCore.QRect(340, 50, 141, 20))
         self.lineEdit_2_tran.setObjectName(_fromUtf8("lineEdit_2_tran"))
         self.lineEdit_1_tran = QtGui.QLineEdit(self.tab_4)
-        self.lineEdit_1_tran.setGeometry(QtCore.QRect(10, 10, 171, 20))
+        self.lineEdit_1_tran.setGeometry(QtCore.QRect(10, 50, 171, 20))
         self.lineEdit_1_tran.setObjectName(_fromUtf8("lineEdit_1_tran"))
         self.next_tran = QtGui.QPushButton(self.tab_4)
         self.next_tran.setGeometry(QtCore.QRect(760, 510, 75, 23))
@@ -140,6 +140,9 @@ class Ui_MainWindow(object):
         self.previous_tran = QtGui.QPushButton(self.tab_4)
         self.previous_tran.setGeometry(QtCore.QRect(10, 510, 75, 23))
         self.previous_tran.setObjectName(_fromUtf8("previous_tran"))
+        self.add_tran = QtGui.QPushButton(self.tab_4)
+        self.add_tran.setGeometry(QtCore.QRect(10, 10, 131, 23))
+        self.add_tran.setObjectName(_fromUtf8("add_tran"))
         self.tabWidget.addTab(self.tab_4, _fromUtf8(""))
         self.tab_5 = QtGui.QWidget()
         self.tab_5.setObjectName(_fromUtf8("tab_5"))
@@ -287,6 +290,7 @@ class Ui_MainWindow(object):
         self.lineEdit_2_tran.setPlaceholderText(_translate("MainWindow", "yyyy-mm-dd", None))
         self.next_tran.setText(_translate("MainWindow", "Next", None))
         self.previous_tran.setText(_translate("MainWindow", "Previous", None))
+        self.add_tran.setText(_translate("MainWindow", "Perform A Transaction", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "Transactions", None))
         self.searchbarcode_units.setText(_translate("MainWindow", "Barcode", None))
         self.searchdev_units.setText(_translate("MainWindow", "Device ID", None))

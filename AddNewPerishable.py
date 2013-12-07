@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'AddNewPerishable.ui'
+# Form implementation generated from reading ui file 'UiFiles\AddNewPerishable.ui'
 #
-# Created: Fri Dec 06 17:05:11 2013
+# Created: Sat Dec 07 08:59:50 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,12 +26,16 @@ except AttributeError:
 class Ui_AddNewPerishable(object):
     def setupUi(self, AddNewPerishable):
         AddNewPerishable.setObjectName(_fromUtf8("AddNewPerishable"))
-        AddNewPerishable.resize(391, 351)
+        AddNewPerishable.resize(421, 380)
         self.label_Heading = QtGui.QLabel(AddNewPerishable)
         self.label_Heading.setGeometry(QtCore.QRect(20, 20, 151, 16))
         self.label_Heading.setObjectName(_fromUtf8("label_Heading"))
+        self.message = QtGui.QLabel(AddNewPerishable)
+        self.message.setGeometry(QtCore.QRect(20, 50, 341, 16))
+        self.message.setText(_fromUtf8(""))
+        self.message.setObjectName(_fromUtf8("message"))
         self.widget = QtGui.QWidget(AddNewPerishable)
-        self.widget.setGeometry(QtCore.QRect(20, 50, 341, 241))
+        self.widget.setGeometry(QtCore.QRect(20, 80, 341, 241))
         self.widget.setObjectName(_fromUtf8("widget"))
         self.gridLayout = QtGui.QGridLayout(self.widget)
         self.gridLayout.setMargin(0)
@@ -113,7 +117,7 @@ class Ui_AddNewPerishable(object):
         self.gridLayout.setColumnStretch(1, 100)
         self.gridLayout.setColumnStretch(2, 50)
         self.widget1 = QtGui.QWidget(AddNewPerishable)
-        self.widget1.setGeometry(QtCore.QRect(190, 310, 182, 25))
+        self.widget1.setGeometry(QtCore.QRect(190, 340, 182, 25))
         self.widget1.setObjectName(_fromUtf8("widget1"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.widget1)
         self.horizontalLayout.setSpacing(30)

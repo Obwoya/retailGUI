@@ -18,6 +18,8 @@ from addUnitWidget import NewUnit
 from deleteUnitWidget import DeleteUnit
 from createPromotionWidget import CreatePromotion
 from deletePromotionWidget import DeletePromotion
+from writeoffWidget import PerformWriteoff
+from performTransactionWidget import PerformTransaction
 
 
 def isNumber(s):
@@ -51,6 +53,7 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.viewall_tran.clicked.connect(self.viewTran)
         self.ui.searchid_tran.clicked.connect(self.viewTran)
         self.ui.searchdate_tran.clicked.connect(self.viewTran)
+        self.ui.add_tran.clicked.connect(self.performTransaction)
 
         self.ui.viewall_units.clicked.connect(self.viewUnits)
         self.ui.searchbarcode_units.clicked.connect(self.viewUnits)
@@ -68,6 +71,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.ui.orderproducts.clicked.connect(self.orderProducts)
         self.ui.updatestock.clicked.connect(self.updateStockAndProduct)
+        self.ui.writeoff.clicked.connect(self.performWriteoff)
 
     def initialiseAllViews(self):
         self.viewProducts()
@@ -194,7 +198,12 @@ class MainWindow(QtGui.QMainWindow):
                     self.ui.lineEdit_1_tran.clear()
                     self.ui.lineEdit_2_tran.clear()
                     self.ui.statusBar.clearMessage()
-                    QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")              
+                    QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")  
+            elif senderEvent == "Transaction":
+                self.ui.lineEdit_1_tran.clear()
+                self.ui.lineEdit_2_tran.clear()
+                count, rowTran = getLists.getTranList(0)
+                self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)            
             else:
                 self.ui.lineEdit_1_tran.clear()
                 self.ui.lineEdit_2_tran.clear()
@@ -346,6 +355,14 @@ class MainWindow(QtGui.QMainWindow):
 
     def deletePromo(self):
         self.child = DeletePromotion(self)
+        self.child.show()
+
+    def performWriteoff(self):
+        self.child = PerformWriteoff(self)
+        self.child.show()
+
+    def performTransaction(self):
+        self.child = PerformTransaction(self)
         self.child.show()
 
 

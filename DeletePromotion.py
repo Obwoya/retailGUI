@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'DeletePromotion.ui'
 #
-# Created: Sat Dec 07 05:52:58 2013
+# Created: Sat Dec 07 06:03:55 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -50,16 +50,16 @@ class Ui_DeletePromotion(object):
         self.gridLayout.setMargin(0)
         self.gridLayout.setVerticalSpacing(15)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.label_Id = QtGui.QLabel(self.gridLayoutWidget)
-        self.label_Id.setObjectName(_fromUtf8("label_Id"))
-        self.gridLayout.addWidget(self.label_Id, 0, 0, 1, 1)
-        self.lineEdit_Id = QtGui.QLineEdit(self.gridLayoutWidget)
-        self.lineEdit_Id.setObjectName(_fromUtf8("lineEdit_Id"))
-        self.gridLayout.addWidget(self.lineEdit_Id, 0, 1, 1, 1)
-        self.error_Id = QtGui.QLabel(self.gridLayoutWidget)
-        self.error_Id.setText(_fromUtf8(""))
-        self.error_Id.setObjectName(_fromUtf8("error_Id"))
-        self.gridLayout.addWidget(self.error_Id, 0, 2, 1, 1)
+        self.label_promoId = QtGui.QLabel(self.gridLayoutWidget)
+        self.label_promoId.setObjectName(_fromUtf8("label_promoId"))
+        self.gridLayout.addWidget(self.label_promoId, 0, 0, 1, 1)
+        self.lineEdit_promoId = QtGui.QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_promoId.setObjectName(_fromUtf8("lineEdit_promoId"))
+        self.gridLayout.addWidget(self.lineEdit_promoId, 0, 1, 1, 1)
+        self.error_promoId = QtGui.QLabel(self.gridLayoutWidget)
+        self.error_promoId.setText(_fromUtf8(""))
+        self.error_promoId.setObjectName(_fromUtf8("error_promoId"))
+        self.gridLayout.addWidget(self.error_promoId, 0, 2, 1, 1)
         self.gridLayout.setColumnStretch(0, 50)
         self.gridLayout.setColumnStretch(1, 100)
         self.gridLayout.setColumnStretch(2, 50)
@@ -73,5 +73,5 @@ class Ui_DeletePromotion(object):
         self.label_Heading.setText(_translate("DeletePromotion", "Delete Promotion", None))
         self.deletePromo.setText(_translate("DeletePromotion", "Delete", None))
         self.cancel.setText(_translate("DeletePromotion", "Cancel", None))
-        self.label_Id.setText(_translate("DeletePromotion", "Promotion ID", None))
+        self.label_promoId.setText(_translate("DeletePromotion", "Promotion ID", None))
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'CreatePromotion.ui'
 #
-# Created: Sat Dec 07 05:37:30 2013
+# Created: Sat Dec 07 06:03:50 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
