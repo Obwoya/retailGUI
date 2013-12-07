@@ -38,7 +38,7 @@ class AddNewPerishable(QtGui.QWidget):
     		year = expiry[:4]
     		month = expiry[5:7]
     		day = expiry[8:]
-    		if isNumber(year) & isNumber(month) & isNumber(day):
+    		if isNumber(year) & isNumber(month) & isNumber(day) & (int(barcode)>=10000000) & (float(price)>0) & (int(stock)>0) & (int(barcode)<=99999999):
     			dateInput = QtCore.QDate(int(year), int(month), int(day))
     			if not dateInput:
     				self.ui.lineEdit_Expiry.clear()
@@ -78,9 +78,19 @@ class AddNewPerishable(QtGui.QWidget):
     					connectDb.closeDatabaseConnection(conn, cur)
     					self.parent.viewPerishables()
     					self.close()
-    		else:
-    			self.ui.lineEdit_Expiry.clear()
-    			self.ui.error_Expiry.setText("*incorrect input")
+        	else:
+                    if (int(barcode) > 99999999) | (int(barcode)<10000000):
+                        self.ui.lineEdit_Barcode.clear()
+                        self.ui.error_Barcode.setText("*incorrect input")
+                    elif float(price) <= 0:
+                        self.ui.lineEdit_Price.clear()
+                        self.ui.error_Price.setText("*incorrect input")
+                    elif int(stock) <= 0:
+                        self.ui.lineEdit_Stock.clear()
+                        self.ui.error_Stock.setText("*incorrect input")
+                    else:
+            			self.ui.lineEdit_Expiry.clear()
+            			self.ui.error_Expiry.setText("*incorrect input")
     	else:
     		self.ui.lineEdit_Barcode.clear()
     		self.ui.lineEdit_Expiry.clear()

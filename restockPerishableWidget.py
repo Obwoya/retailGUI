@@ -31,7 +31,7 @@ class RestockPerishable(QtGui.QWidget):
                 year = expiry[:4]
                 month = expiry[5:7]
                 day = expiry[8:]
-                if isNumber(year) & isNumber(month) & isNumber(day):
+                if isNumber(year) & isNumber(month) & isNumber(day) & (int(stock)>0):
                     dateInput = QtCore.QDate(int(year), int(month), int(day))
                     if dateInput:
                         barcode = int(barcode)
@@ -66,8 +66,12 @@ class RestockPerishable(QtGui.QWidget):
                         self.ui.lineEdit_Expiry.clear()
                         self.ui.error_Expiry.setText("*incorrect input")
                 else:
-                    self.ui.lineEdit_Expiry.clear()
-                    self.ui.error_Expiry.setText("*incorrect input")
+                    if int(stock) <= 0:
+                        self.ui.lineEdit_Stock.clear()
+                        self.ui.error_Stock.setText("*incorrect input")
+                    else:
+                        self.ui.lineEdit_Expiry.clear()
+                        self.ui.error_Expiry.setText("*incorrect input")
             else:
                 if not isNumber(stock):
                     self.ui.lineEdit_Stock.clear()

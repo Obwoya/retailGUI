@@ -66,30 +66,38 @@ class UpdatePerishable(QtGui.QWidget):
         if flag != 0 & (len(str(barcode)) == 8):
             barcode = int(barcode)
             price = float(price)
-            conn, cur = connectDb.connectToDatabase()
-            checkForExistence = "SELECT count(distinct product.barcode) FROM product, batch WHERE product.barcode=batch.barcode AND product.active=1 AND NOT ISNULL(batch.expiry) AND product.barcode= %d ;" % barcode
-            cur.execute(checkForExistence)
-            count = cur.fetchone()
-            count = count[0]
-            if count == 1:
-                if len(category) == 0:
-                    if len(manu) == 0:
-                        insertProduct = "UPDATE product SET name='%s', category=NULL, manufacturer=NULL, cost=%.2f WHERE barcode = %d" % (name, price, barcode)
+            if (price>0) & (barcode>0):
+                conn, cur = connectDb.connectToDatabase()
+                checkForExistence = "SELECT count(distinct product.barcode) FROM product, batch WHERE product.barcode=batch.barcode AND product.active=1 AND NOT ISNULL(batch.expiry) AND product.barcode= %d ;" % barcode
+                cur.execute(checkForExistence)
+                count = cur.fetchone()
+                count = count[0]
+                if count == 1:
+                    if len(category) == 0:
+                        if len(manu) == 0:
+                            insertProduct = "UPDATE product SET name='%s', category=NULL, manufacturer=NULL, cost=%.2f WHERE barcode = %d" % (name, price, barcode)
+                        else:
+                            insertProduct = "UPDATE product SET name='%s', category=NULL, manufacturer='%s', cost=%.2f WHERE barcode = %d" % (name, manu, price, barcode)
                     else:
-                        insertProduct = "UPDATE product SET name='%s', category=NULL, manufacturer='%s', cost=%.2f WHERE barcode = %d" % (name, manu, price, barcode)
+                        if len(manu) == 0:
+                            insertProduct = "UPDATE product SET name='%s', category='%s', manufacturer=NULL, cost=%.2f WHERE barcode = %d" % (name, category, price, barcode)
+                        else:
+                            insertProduct = "UPDATE product SET name='%s', category='%s', manufacturer='%s', cost=%.2f WHERE barcode = %d" % (name, category, manu, price, barcode)
+                    cur.execute(insertProduct)
+                    conn.commit()
+                    self.parent.viewPerishables()
+                    self.close()
                 else:
-                    if len(manu) == 0:
-                        insertProduct = "UPDATE product SET name='%s', category='%s', manufacturer=NULL, cost=%.2f WHERE barcode = %d" % (name, category, price, barcode)
-                    else:
-                        insertProduct = "UPDATE product SET name='%s', category='%s', manufacturer='%s', cost=%.2f WHERE barcode = %d" % (name, category, manu, price, barcode)
-                cur.execute(insertProduct)
-                conn.commit()
-                self.parent.viewPerishables()
-                self.close()
-            else:
-                self.ui.message.setText("No Perishable Product with the entered barcode found to update")
+                    self.ui.message.setText("No Perishable Product with the entered barcode found to update")
 
-            connectDb.closeDatabaseConnection(conn, cur)
+                connectDb.closeDatabaseConnection(conn, cur)
+            else:
+                if int(barcode) <= 0:
+                    self.ui.lineEdit_Barcode.clear()
+                    self.ui.error_Barcode.setText("*incorrect input")
+                elif float(price) <= 0:
+                    self.ui.lineEdit_Price.clear()
+                    self.ui.error_Price.setText("*incorrect input")
         else:
             self.ui.lineEdit_Price.clear()
             self.ui.lineEdit_Manu.clear()

@@ -74,32 +74,116 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.writeoff.clicked.connect(self.performWriteoff)
 
     def initialiseAllViews(self):
+        self.dashboard()
         self.viewProducts()
         self.viewPerishables()
         self.viewTran()
         self.viewUnits()
         self.viewPromo()
 
+    def dashboard(self):
+        conn, cur = connectDb.connectToDatabase()
+        noOfTrans = "SELECT count(distinct t.transactionid) FROM transaction t WHERE t.date = CURDATE()"
+        cur.execute(noOfTrans)
+        countTransDay = cur.fetchone()
+        countTransDay = countTransDay[0]
+        if countTransDay != 0:
+            moneyTrans = "SELECT sum(price) FROM transaction WHERE transaction.date = CURDATE()"
+            cur.execute(moneyTrans)
+            totalMoney = cur.fetchone()
+            totalMoney = totalMoney[0]
+            itemsSold = "SELECT sum(td.unitsold) FROM transaction t, transactiondetails td WHERE t.transactionid = td.transactionid AND t.date = CURDATE()"
+            cur.execute(itemsSold)
+            totalItemsSold = cur.fetchone()
+            totalItemsSold = totalItemsSold[0]
+        else:
+            totalMoney = 0
+            totalItemsSold = 0
+        self.ui.noTrans.setText("Number of Transactions Today : %d" % countTransDay)
+        self.ui.moneyDay.setText("Total Money Received Today : $%.2f" % totalMoney)
+        self.ui.noItems.setText("Number of Items sold Today: %d" % totalItemsSold)
+        connectDb.closeDatabaseConnection(conn, cur)
+
+    def getProducts(self, option = 0, value = None):
+        if option == 0:
+            count, rowProduct = getLists.getProductList(0)
+        else:
+            count, rowProduct = getLists.getProductList(option, value)
+        if option != 1:
+            self.ui.lineEdit_1_products.clear()
+        if option != 2:
+            self.ui.lineEdit_2_products.clear()
+        return count, rowProduct
+
+    def getPerish(self, option = 0, value = None):
+        if option == 0:
+            count, rowProduct = getLists.getPerishableList(0)
+        else:
+            count, rowProduct = getLists.getPerishableList(option, value)
+        if option != 1:
+            self.ui.lineEdit_1_perishable.clear()
+        if option != 2:
+            self.ui.lineEdit_2_perishable.clear()
+        return count, rowProduct
+
+    def getTransactions(self, option = 0, value = None):
+        if option == 0:
+            count, rowTran = getLists.getTranList(0)
+        else:
+            count, rowTran = getLists.getTranList(option, value)
+        if option != 1:
+            self.ui.lineEdit_1_tran.clear()
+        if option != 2:
+            self.ui.lineEdit_2_tran.clear()
+        return count, rowTran
+
+    def getUnits(self, option = 0, value = None):
+        if option == 0:
+            countCashier, rowCashier = getLists.getCashierList(0)
+            countPdu, rowPDUs = getLists.getPDUList(0)
+        elif option == 1:
+            countCashier, rowCashier = getLists.getCashierList(0)
+            countPdu, rowPDUs = getLists.getPDUList(1, value)
+        elif option == 2:
+            countCashier, rowCashier = getLists.getCashierList(2, value)
+            countPdu, rowPDUs = getLists.getPDUList(2, value)
+        if option != 1:
+            self.ui.lineEdit_1_units.clear()
+        if option != 2:
+            self.ui.lineEdit_2_units.clear()
+        return countCashier, rowCashier, countPdu, rowPDUs
+
+    def getPromos(self, option = 0, value = None):
+        if option == 0:
+            count, rowPromo = getLists.getPromoList(0)
+        else:
+            count, rowPromo = getLists.getPromoList(option, value)
+        if option != 1:
+            self.ui.lineEdit_1_promo.clear()
+        if option != 2:
+            self.ui.lineEdit_2_promo.clear()
+        if option != 3:
+            self.ui.lineEdit_3_promo.clear()
+        return count, rowPromo
+
+
     def viewProducts(self):
         self.ui.statusBar.showMessage("Loading Data, please wait...")
+        self.dashboard()
         flag = 1
         headerProducts = ['Barcode', 'Name', 'Category', 'Manufacturer', 'Price per Unit', 'Stock']
         columnWidth = [75, 250, 125, 125, 100, 75]
         sender = self.sender()
         if sender is not None:
             senderEvent = sender.text()
-            if senderEvent == "View All":
-                self.ui.lineEdit_1_products.clear()
-                self.ui.lineEdit_2_products.clear()
-                count, rowProduct = getLists.getProductList(0)
-            elif (senderEvent == "Barcode") & isNumber(self.ui.lineEdit_1_products.text()):
-                self.ui.lineEdit_2_products.clear()
+            if senderEvent == "Refresh":
+                count, rowProduct = self.getProducts(0)
+            elif (senderEvent == "Filter Barcode") & isNumber(self.ui.lineEdit_1_products.text()):
                 barcodeSearch = int(self.ui.lineEdit_1_products.text())
-                count, rowProduct = getLists.getProductList(1, barcodeSearch)
-            elif senderEvent == "Name":
-                self.ui.lineEdit_1_products.clear()
+                count, rowProduct = self.getProducts(1, barcodeSearch)
+            elif senderEvent == "Filter Name":
                 nameSearch = str(self.ui.lineEdit_2_products.text())
-                count, rowProduct = getLists.getProductList(2, nameSearch)
+                count, rowProduct = self.getProducts(2, nameSearch)
             else:
                 flag = 0
                 self.ui.lineEdit_1_products.clear()
@@ -110,44 +194,35 @@ class MainWindow(QtGui.QMainWindow):
             count, rowProduct = getLists.getProductList(0)
         if flag:
             self.arrayToTable(rowProduct, self.ui.tableWidget_products, headerProducts, columnWidth, count, count, 6)
+        if count == 0:
+            self.ui.statusBar.showMessage("No Results Found", 2000)    
 
     def viewPerishables(self):
         flag = 1
         self.ui.statusBar.showMessage("Loading Data, please wait...")
+        self.dashboard()
         sender = self.sender()
         headerProducts = ['Barcode', 'Name', 'Category', 'Manufacturer', 'Price per Unit', 'Stock']
         columnWidth = [75, 250, 125, 125, 100, 75]
         if sender is not None:
             senderEvent = sender.text()
 
-            if senderEvent == "View All":
-                self.ui.lineEdit_1_perishable.clear()
-                self.ui.lineEdit_2_perishable.clear()
-                count, rowProduct = getLists.getPerishableList(0)
-            elif (senderEvent == "Barcode") & isNumber(self.ui.lineEdit_1_perishable.text()):
-                self.ui.lineEdit_2_perishable.clear()
+            if senderEvent == "Refresh":
+                count, rowProduct = self.getPerish(0)
+            elif (senderEvent == "Filter Barcode") & isNumber(self.ui.lineEdit_1_perishable.text()):
                 barcodeSearch = int(self.ui.lineEdit_1_perishable.text())
-                count, rowProduct = getLists.getPerishableList(1, barcodeSearch)
-            elif senderEvent == "Name":
-                self.ui.lineEdit_1_perishable.clear()
+                count, rowProduct = self.getPerish(1, barcodeSearch)
+            elif senderEvent == "Filter Name":
                 nameSearch = str(self.ui.lineEdit_2_perishable.text())
-                count, rowProduct = getLists.getPerishableList(2, nameSearch)
+                count, rowProduct = self.getPerish(2, nameSearch)
             elif senderEvent == "Create New":
-                self.ui.lineEdit_1_perishable.clear()
-                self.ui.lineEdit_2_perishable.clear()
-                count, rowProduct = getLists.getPerishableList(0)
+                count, rowProduct = self.getPerish(0)
             elif senderEvent == "Delete":
-                self.ui.lineEdit_1_perishable.clear()
-                self.ui.lineEdit_2_perishable.clear()
-                count, rowProduct = getLists.getPerishableList(0)
+                count, rowProduct = self.getPerish(0)
             elif senderEvent == "Restock":
-                self.ui.lineEdit_1_perishable.clear()
-                self.ui.lineEdit_2_perishable.clear()
-                count, rowProduct = getLists.getPerishableList(0)
+                count, rowProduct = self.getPerish(0)
             elif senderEvent == "Update":
-                self.ui.lineEdit_1_perishable.clear()
-                self.ui.lineEdit_2_perishable.clear()
-                count, rowProduct = getLists.getPerishableList(0)
+                count, rowProduct = self.getPerish(0)
             else:
                 flag = 0
                 self.ui.lineEdit_1_perishable.clear()
@@ -158,9 +233,12 @@ class MainWindow(QtGui.QMainWindow):
             count, rowProduct = getLists.getPerishableList(0)
         if flag:
             self.arrayToTable(rowProduct, self.ui.tableWidget_perishable, headerProducts, columnWidth, count, count, 6)
+        if count == 0:
+            self.ui.statusBar.showMessage("No Results Found", 2000)
 
     def viewTran(self):
         self.ui.statusBar.showMessage("Loading Data, please wait...")
+        self.dashboard()
         sender = self.sender()
         headerTrans = ['Transaction ID', 'Cashier Unit', 'Date', 'Total Bill']
         headerTransDetail = ['Transaction ID', 'Barcode', 'Promo ID', 'Quantity', 'Type of Transaction']
@@ -168,17 +246,14 @@ class MainWindow(QtGui.QMainWindow):
         columnWidthTransDetail = [170, 170, 170, 100, 130]
         if sender is not None:
             senderEvent = sender.text()
-            if senderEvent == "View All":
-                self.ui.lineEdit_1_tran.clear()
-                self.ui.lineEdit_2_tran.clear()
-                count, rowTran = getLists.getTranList(0)
+            if senderEvent == "Refresh":
+                count, rowTran = self.getTransactions(0)
                 self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)
-            elif (senderEvent == "Transaction ID") & isNumber(self.ui.lineEdit_1_tran.text()):
-                self.ui.lineEdit_2_tran.clear()
+            elif (senderEvent == "Filter Transaction ID") & isNumber(self.ui.lineEdit_1_tran.text()):
                 idSearch = int(self.ui.lineEdit_1_tran.text())
-                count, rowTran = getLists.getTranList(1, idSearch)
+                count, rowTran = self.getTransactions(1, idSearch)
                 self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTransDetail, columnWidthTransDetail, count, count, 5)
-            elif senderEvent == "Date":
+            elif senderEvent == "Filter Date":
                 self.ui.lineEdit_1_tran.clear()
                 dateSearch = str(self.ui.lineEdit_2_tran.text())
                 year = dateSearch[:4]
@@ -187,7 +262,7 @@ class MainWindow(QtGui.QMainWindow):
                 if isNumber(year) & isNumber(month) & isNumber(day):
                     dateInput = QtCore.QDate(int(year), int(month), int(day))
                     if dateInput:
-                        count, rowTran = getLists.getTranList(2, dateSearch)
+                        count, rowTran = self.getTransactions(2, dateSearch)
                         self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)
                     else:
                         self.ui.lineEdit_1_tran.clear()
@@ -200,9 +275,7 @@ class MainWindow(QtGui.QMainWindow):
                     self.ui.statusBar.clearMessage()
                     QtGui.QMessageBox.about(self, "Error!", "The value entered was not valid   ")  
             elif senderEvent == "Transaction":
-                self.ui.lineEdit_1_tran.clear()
-                self.ui.lineEdit_2_tran.clear()
-                count, rowTran = getLists.getTranList(0)
+                count, rowTran = self.getTransactions(0)
                 self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)            
             else:
                 self.ui.lineEdit_1_tran.clear()
@@ -212,10 +285,13 @@ class MainWindow(QtGui.QMainWindow):
         else:
             count, rowTran = getLists.getTranList(0)
             self.arrayToTable(rowTran, self.ui.tableWidget_tran, headerTrans, columnWidthTrans, count, count, 4)
+        if count == 0:
+            self.ui.statusBar.showMessage("No Results Found", 2000)
 
     def viewUnits(self):
         flag = 1
         self.ui.statusBar.showMessage("Loading Data, please wait...")
+        self.dashboard()
         sender = self.sender()
         headerCashier = ['Cashier Unit ID']
         headerPdu = ['PDU ID', 'Barcode Map']
@@ -223,41 +299,22 @@ class MainWindow(QtGui.QMainWindow):
         columnPdu = [385, 385]
         if sender is not None:
             senderEvent = sender.text()
-            if senderEvent == "View All":
-                self.ui.lineEdit_1_units.clear()
-                self.ui.lineEdit_2_units.clear()
-                countCashier, rowCashier = getLists.getCashierList(0)
-                countPdu, rowPDUs = getLists.getPDUList(0)
-            elif (senderEvent == "Barcode") & isNumber(self.ui.lineEdit_1_units.text()):
-                self.ui.lineEdit_2_units.clear()
+            if senderEvent == "Refresh":
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
+            elif (senderEvent == "Filter Barcode") & isNumber(self.ui.lineEdit_1_units.text()):
                 barcodeSearch = int(self.ui.lineEdit_1_units.text())
-                countCashier, rowCashier = getLists.getCashierList(0)
-                countPdu, rowPDUs = getLists.getPDUList(1, barcodeSearch)
-            elif (senderEvent == "Device ID") & isNumber(self.ui.lineEdit_2_units.text()):
-                self.ui.lineEdit_1_units.clear()
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(1, barcodeSearch)
+            elif (senderEvent == "Filter Device ID") & isNumber(self.ui.lineEdit_2_units.text()):
                 nameSearch = int(self.ui.lineEdit_2_units.text())
-                countCashier, rowCashier = getLists.getCashierList(2, nameSearch)
-                countPdu, rowPDUs = getLists.getPDUList(2, nameSearch)
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(2, nameSearch)
             elif (senderEvent == "Add Cashier"):
-                self.ui.lineEdit_1_units.clear()
-                self.ui.lineEdit_2_units.clear()
-                countCashier, rowCashier = getLists.getCashierList(0)
-                countPdu, rowPDUs = getLists.getPDUList(0)
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
             elif (senderEvent == "Add PDU"):
-                self.ui.lineEdit_1_units.clear()
-                self.ui.lineEdit_2_units.clear()
-                countCashier, rowCashier = getLists.getCashierList(0)
-                countPdu, rowPDUs = getLists.getPDUList(0)
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
             elif (senderEvent == "Remap PDU"):
-                self.ui.lineEdit_1_units.clear()
-                self.ui.lineEdit_2_units.clear()
-                countCashier, rowCashier = getLists.getCashierList(0)
-                countPdu, rowPDUs = getLists.getPDUList(0)
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
             elif (senderEvent == "Delete"):
-                self.ui.lineEdit_1_units.clear()
-                self.ui.lineEdit_2_units.clear()
-                countCashier, rowCashier = getLists.getCashierList(0)
-                countPdu, rowPDUs = getLists.getPDUList(0)
+                countCashier, rowCashier, countPdu, rowPDUs = self.getUnits(0)
             else:
                 flag = 0
                 self.ui.lineEdit_1_units.clear()
@@ -270,45 +327,33 @@ class MainWindow(QtGui.QMainWindow):
         if flag:
             self.arrayToTable(rowCashier, self.ui.tableWidget_cashier, headerCashier, columnCashier, countCashier, countCashier, 1)
             self.arrayToTable(rowPDUs, self.ui.tableWidget_pdu, headerPdu, columnPdu, countPdu, countPdu, 2)
+        if (countCashier == 0) & (countPdu == 0):
+            self.ui.statusBar.showMessage("No Results Found", 2000)
 
     def viewPromo(self):
         flag = 1
         self.ui.statusBar.showMessage("Loading Data, please wait...")
+        self.dashboard()
         sender = self.sender()
         headerPromo = ['Promo ID', 'Barcode', 'Name', 'Unit Price', 'Stock', 'Promotion Bundle Value']
         columnWidth = [80, 90, 250, 100, 100, 150]
         if sender is not None:
             senderEvent = sender.text()
-            if senderEvent == "View All":
-                self.ui.lineEdit_1_promo.clear()
-                self.ui.lineEdit_2_promo.clear()
-                self.ui.lineEdit_3_promo.clear()
-                count, rowPromo = getLists.getPromoList(0)
-            elif (senderEvent == "Barcode") & isNumber(self.ui.lineEdit_1_promo.text()):
-                self.ui.lineEdit_2_promo.clear()
-                self.ui.lineEdit_3_promo.clear()
+            if senderEvent == "Refresh":
+                count, rowPromo = self.getPromos(0)
+            elif (senderEvent == "Filter Barcode") & isNumber(self.ui.lineEdit_1_promo.text()):
                 barcodeSearch = int(self.ui.lineEdit_1_promo.text())
-                count, rowPromo = getLists.getPromoList(1, barcodeSearch)
-            elif (senderEvent == "Promo ID") & isNumber(self.ui.lineEdit_2_promo.text()):
-                self.ui.lineEdit_1_promo.clear()
-                self.ui.lineEdit_3_promo.clear()
+                count, rowPromo = self.getPromos(1, barcodeSearch)
+            elif (senderEvent == "Filter Promo ID") & isNumber(self.ui.lineEdit_2_promo.text()):
                 idSearch = int(self.ui.lineEdit_2_promo.text())
-                count, rowPromo = getLists.getPromoList(2, idSearch)
-            elif senderEvent == "Name":
-                self.ui.lineEdit_1_promo.clear()
-                self.ui.lineEdit_2_promo.clear()
+                count, rowPromo = self.getPromos(2, idSearch)
+            elif senderEvent == "Filter Name":
                 nameSearch = str(self.ui.lineEdit_3_promo.text())
-                count, rowPromo = getLists.getPromoList(3, nameSearch)
+                count, rowPromo = self.getPromos(3, nameSearch)
             elif senderEvent == "Create":
-                self.ui.lineEdit_1_promo.clear()
-                self.ui.lineEdit_2_promo.clear()
-                self.ui.lineEdit_3_promo.clear()
-                count, rowPromo = getLists.getPromoList(0)
+                count, rowPromo = self.getPromos(0)
             elif senderEvent == "Delete":
-                self.ui.lineEdit_1_promo.clear()
-                self.ui.lineEdit_2_promo.clear()
-                self.ui.lineEdit_3_promo.clear()
-                count, rowPromo = getLists.getPromoList(0)
+                count, rowPromo = self.getPromos(0)
             else:
                 flag = 0
                 self.ui.lineEdit_1_promo.clear()
@@ -320,6 +365,9 @@ class MainWindow(QtGui.QMainWindow):
             count, rowPromo = getLists.getPromoList(0)
         if flag:
             self.arrayToTable(rowPromo, self.ui.tableWidget_promo, headerPromo, columnWidth, count, count, 6)
+        if count == 0:
+            self.ui.statusBar.showMessage("No Results Found", 2000)
+
 
     def addNewPerishable(self):
         self.child = AddNewPerishable(self)
@@ -408,7 +456,25 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.statusBar.clearMessage()
 
 
-app = QtGui.QApplication(sys.argv) 
+def managerLogin():
+    mid, ok = QtGui.QInputDialog.getText(QtGui.QWidget, 'Manager Login', 'Manager Id:')
+    pwd, ok = QtGui.QInputDialog.getText(self, 'Manager Login', 'Password:')
+    if ok:
+        success = getInfo.getManager(mid,pwd)
+        if success is not None:
+            app = QtGui.QApplication(sys.argv)
+            frame = MainWindow() 
+            frame.show() 
+            sys.exit(app.exec_())
+        else:
+            ok = QtGui.QMessageBox.information(self, "Information", "Incorrect id or password!")
+            if ok:
+                managerLogin()
+
+
+#managerLogin()
+
+app = QtGui.QApplication(sys.argv)
 frame = MainWindow() 
 frame.show() 
 sys.exit(app.exec_())

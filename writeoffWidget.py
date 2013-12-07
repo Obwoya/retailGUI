@@ -31,28 +31,32 @@ class PerformWriteoff(QtGui.QWidget):
             if (isNumber(barcode)) & (isNumber(qty)):
                 barcode = int(barcode)
                 qty = int(qty)
-                conn, cur = connectDb.connectToDatabase()
-                checkExistence = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d" % barcode
-                checkQty = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d AND stocklevel >= %d" % (barcode, qty)
-                cur.execute(checkQty)
-                count = cur.fetchone()
-                count = count[0]
-                if count != 0:
-                    self.items[barcode] = qty
-                    self.ui.lineEdit_qty.clear()
-                    self.ui.lineEdit_barcode.clear()
-                else:
-                    cur.execute(checkExistence)
+                if (qty>0):
+                    conn, cur = connectDb.connectToDatabase()
+                    checkExistence = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d" % barcode
+                    checkQty = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d AND stocklevel >= %d" % (barcode, qty)
+                    cur.execute(checkQty)
                     count = cur.fetchone()
                     count = count[0]
                     if count != 0:
-                        self.ui.lineEdit_qty.clear()
-                        self.ui.error_qty.setText("*not enough stock")
-                    else:
+                        self.items[barcode] = qty
                         self.ui.lineEdit_qty.clear()
                         self.ui.lineEdit_barcode.clear()
-                        self.ui.error_barcode.setText("*no such product")
-                connectDb.closeDatabaseConnection(conn, cur)
+                    else:
+                        cur.execute(checkExistence)
+                        count = cur.fetchone()
+                        count = count[0]
+                        if count != 0:
+                            self.ui.lineEdit_qty.clear()
+                            self.ui.error_qty.setText("*not enough stock")
+                        else:
+                            self.ui.lineEdit_qty.clear()
+                            self.ui.lineEdit_barcode.clear()
+                            self.ui.error_barcode.setText("*no such product")
+                    connectDb.closeDatabaseConnection(conn, cur)
+                else:
+                    self.ui.lineEdit_qty.clear()
+                    self.ui.error_qty.setText("*incorrect input")
             else:
                 if not isNumber(barcode):
                     self.ui.lineEdit_qty.clear()
@@ -81,51 +85,55 @@ class PerformWriteoff(QtGui.QWidget):
             if (isNumber(barcode)) & (isNumber(qty)):
                 barcode = int(barcode)
                 qty = int(qty)
-                conn, cur = connectDb.connectToDatabase()
-                checkExistence = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d" % barcode
-                checkQty = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d AND stocklevel >= %d" % (barcode, qty)
-                cur.execute(checkQty)
-                count = cur.fetchone()
-                count = count[0]
-                if count != 0:
-                    self.items[barcode] = qty
-
-                    tid = getInfo.getNextTransactionId()
-                    cid = 0 #Manager
-                    cur.execute("INSERT INTO transaction VALUES (%d, %d, CURDATE(), 0.00);" % (tid, cid))
-                    keys = self.items.keys()
-                    cur1 = conn.cursor()
-                    for barcode in keys:
-                        qty = self.items.get(barcode)
-                        cur.execute("SELECT batchdate, stock FROM batch WHERE barcode = %d;" % barcode)
-                        stockAccountedFor = 0
-                        for allBatches in cur.fetchall():
-                            batchStock = allBatches[1]
-                            batchDate = allBatches[0]
-                            #Even after adding this batch, we are unable to reach the required stock to be removed
-                            if stockAccountedFor+batchStock <= qty:
-                                cur1.execute("DELETE FROM batch WHERE barcode = %d AND batchdate = \'%s\';" % (barcode,batchDate))
-                                stockAccountedFor = stockAccountedFor + batchStock
-                            else:
-                                cur1.execute("UPDATE batch SET stock = stock - %d WHERE barcode=%d AND batchdate=\'%s\';" % (qty-stockAccountedFor,barcode,batchDate))                      
-                                stockAccountedFor = qty
-                        cur.execute("INSERT INTO transactiondetails VALUES(%d, %d, NULL, %d,'writeoff');" % (tid,barcode,qty))
-                        cur.execute("UPDATE product SET stocklevel = stocklevel - %d WHERE barcode=%d;" % (qty,barcode))
-                    conn.commit()
-                    self.close()
-
-                else:
-                    cur.execute(checkExistence)
+                if (qty < 0):
+                    conn, cur = connectDb.connectToDatabase()
+                    checkExistence = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d" % barcode
+                    checkQty = "SELECT count(*) FROM product WHERE active = 1 AND barcode = %d AND stocklevel >= %d" % (barcode, qty)
+                    cur.execute(checkQty)
                     count = cur.fetchone()
                     count = count[0]
                     if count != 0:
-                        self.ui.lineEdit_qty.clear()
-                        self.ui.error_qty.setText("*not enough stock")
+                        self.items[barcode] = qty
+
+                        tid = getInfo.getNextTransactionId()
+                        cid = 0 #Manager
+                        cur.execute("INSERT INTO transaction VALUES (%d, %d, CURDATE(), 0.00);" % (tid, cid))
+                        keys = self.items.keys()
+                        cur1 = conn.cursor()
+                        for barcode in keys:
+                            qty = self.items.get(barcode)
+                            cur.execute("SELECT batchdate, stock FROM batch WHERE barcode = %d;" % barcode)
+                            stockAccountedFor = 0
+                            for allBatches in cur.fetchall():
+                                batchStock = allBatches[1]
+                                batchDate = allBatches[0]
+                                #Even after adding this batch, we are unable to reach the required stock to be removed
+                                if stockAccountedFor+batchStock <= qty:
+                                    cur1.execute("DELETE FROM batch WHERE barcode = %d AND batchdate = \'%s\';" % (barcode,batchDate))
+                                    stockAccountedFor = stockAccountedFor + batchStock
+                                else:
+                                    cur1.execute("UPDATE batch SET stock = stock - %d WHERE barcode=%d AND batchdate=\'%s\';" % (qty-stockAccountedFor,barcode,batchDate))                      
+                                    stockAccountedFor = qty
+                            cur.execute("INSERT INTO transactiondetails VALUES(%d, %d, NULL, %d,'writeoff');" % (tid,barcode,qty))
+                            cur.execute("UPDATE product SET stocklevel = stocklevel - %d WHERE barcode=%d;" % (qty,barcode))
+                        conn.commit()
+                        self.close()
+
                     else:
-                        self.ui.lineEdit_qty.clear()
-                        self.ui.lineEdit_barcode.clear()
-                        self.ui.error_barcode.setText("*no such product")
-                connectDb.closeDatabaseConnection(conn, cur)
+                        cur.execute(checkExistence)
+                        count = cur.fetchone()
+                        count = count[0]
+                        if count != 0:
+                            self.ui.lineEdit_qty.clear()
+                            self.ui.error_qty.setText("*not enough stock")
+                        else:
+                            self.ui.lineEdit_qty.clear()
+                            self.ui.lineEdit_barcode.clear()
+                            self.ui.error_barcode.setText("*no such product")
+                    connectDb.closeDatabaseConnection(conn, cur)
+                else:
+                    self.ui.lineEdit_qty.clear()
+                    self.ui.error_qty.setText("*incorrect input")
             else:
                 if not isNumber(barcode):
                     self.ui.lineEdit_qty.clear()

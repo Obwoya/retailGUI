@@ -83,7 +83,7 @@ class NewUnit(QtGui.QWidget):
             if isNumber(did) & isNumber(barcode) & (len(str(barcode)) == 8):
                 did = int(did)
                 barcode = int(barcode)
-                if did<65536:
+                if did<65536 & did>0:
                     conn, cur = connectDb.connectToDatabase()
                     checkForExistence = "SELECT count(*) FROM pdumap WHERE pdumap.id = %d ;" % did
                     cur.execute(checkForExistence)

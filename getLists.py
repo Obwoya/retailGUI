@@ -50,13 +50,13 @@ def getTranList(option, valueSearch = None):
 	conn, cur = connectDb.connectToDatabase()
 	if option == 0:
 		countQuery = "SELECT count(*) FROM transaction"
-		resultQuery = "SELECT * FROM transaction"
+		resultQuery = "SELECT * FROM transaction t ORDER BY t.date DESC"
 	elif option == 1:
 		countQuery = "SELECT count(*) FROM transactiondetails WHERE transactionid = %d" % valueSearch
 		resultQuery = "SELECT * FROM transactiondetails WHERE transactionid = %d" % valueSearch
 	elif option == 2:
 		countQuery = "SELECT count(*) FROM transaction t WHERE t.date = '%s'" % valueSearch
-		resultQuery = "SELECT * FROM transaction t WHERE t.date = '%s'" % valueSearch
+		resultQuery = "SELECT * FROM transaction t WHERE t.date = '%s' ORDER BY t.transactionid DESC" % valueSearch
 	cur.execute(countQuery)
 	count = cur.fetchone()
 	count = count[0]

@@ -19,7 +19,7 @@ class DeletePromotion(QtGui.QWidget):
         self.parent = parent
 
     def removePromo(self):
-        self.ui.error_Id.clear()
+        self.ui.error_promoId.clear()
         promoId = self.ui.lineEdit_Id.text()
 
         if (len(str(promoId)) > 0):
