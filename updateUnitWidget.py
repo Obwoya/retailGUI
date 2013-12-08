@@ -53,6 +53,7 @@ class RemapUnit(QtGui.QWidget):
                         if countProd == 1:
                             insertQuery = "UPDATE pdumap SET barcode = %d WHERE id = %d AND port = %d" % (barcode, did, port)
                             cur.execute(insertQuery)
+                            cur.execute("UPDATE flag SET flag=1 WHERE 1")
                             conn.commit()
                             self.parent.viewUnits()
                             self.close()
@@ -63,7 +64,6 @@ class RemapUnit(QtGui.QWidget):
                         self.ui.device_id.clear()
                         self.ui.device_port.clear()
                         self.ui.device_barcode.clear()
-                        print countPort
                         if countPort >= 1:
                             self.ui.error_Port.setText("*port doesn't exist")
                         else:

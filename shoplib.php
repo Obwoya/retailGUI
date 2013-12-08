@@ -189,5 +189,6 @@ function getData() {
 		}			
 	}
 	echo "finished shipping list";
+	mysql_query("UPDATE flag SET flag=1 WHERE 1");
 }
 ?>

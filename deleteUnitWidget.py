@@ -40,6 +40,7 @@ class DeleteUnit(QtGui.QWidget):
                     if countPdu == 1:
                         query = "DELETE FROM pdumap WHERE id = %d;" % device
                     cur.execute(query)
+                    cur.execute("UPDATE flag SET flag=1 WHERE 1")
                     conn.commit()
                     self.parent.viewUnits()
                     self.close()

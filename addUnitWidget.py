@@ -42,6 +42,7 @@ class NewUnit(QtGui.QWidget):
                     if (count == 0) & (countOther == 0):
                         insertQuery = "INSERT INTO cashier VALUES(%d, %d, 1)" % (cid, pwd)
                         cur.execute(insertQuery)
+                        cur.execute("UPDATE flag SET flag=1 WHERE 1")
                         conn.commit()
                         self.parent.viewUnits()
                         self.close()
@@ -104,6 +105,7 @@ class NewUnit(QtGui.QWidget):
                         if countProd == 1:
                             insertQuery = "INSERT INTO pdumap(id, port, barcode) VALUES(%d, %d, %d)" % (did, port, barcode)
                             cur.execute(insertQuery)
+                            cur.execute("UPDATE flag SET flag=1 WHERE 1")
                             conn.commit()
                             self.parent.viewUnits()
                             self.close()

@@ -71,3 +71,8 @@ CREATE TABLE IF NOT EXISTS `pdumap` (
 	PRIMARY KEY (`id`, `port`),
 	FOREIGN KEY (`barcode`) REFERENCES `product`(`barcode`)
 )  ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `flag` (
+	`flag` INT DEFAULT 1
+)  ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+INSERT INTO flag(flag) VALUES(1);
