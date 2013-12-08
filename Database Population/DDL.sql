@@ -1,3 +1,13 @@
+DROP TABLE flag; 
+DROP TABLE transactiondetails; 
+DROP TABLE pdumap; 
+DROP table transaction; 
+DROP TABLE manager; 
+DROP TABLE cashier;
+DROP TABLE promotion; 
+DROP TABLE batch; 
+DROP TABLE product;
+
 CREATE TABLE IF NOT EXISTS `product` (
 	`barcode` BIGINT UNSIGNED PRIMARY KEY,
 	`name` VARCHAR (255) NOT NULL,
@@ -76,3 +86,15 @@ CREATE TABLE IF NOT EXISTS `flag` (
 	`flag` INT DEFAULT 1
 )  ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 INSERT INTO flag(flag) VALUES(1);
+INSERT INTO manager(id, pwd) VALUES(1001, 'password');
+INSERT INTO manager(id, pwd) VALUES(1002, 'password');
+
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,0,38997021);
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,1,39077557);
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,2,67238229);
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,3,10100338);
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,4,10127000);
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,5,19266268);
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,6,10005058);
+INSERT INTO `pdumap`(`id`, `port`, `barcode`) VALUES (29474,7,19341702);
+INSERT INTO `cashier` (`id`, `pwd`, `active`) VALUES ('0', '0', '1');

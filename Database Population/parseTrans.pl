@@ -42,7 +42,7 @@ while($line = <input>) {
 	if($flag == 0) {
 		$cashiers[$numOfCashier] = $temp[1];
 		$numOfCashier++;
-		$printline = "INSERT INTO cashier VALUES($cashier,$numOfCashier);\n";
+		$printline = "INSERT INTO cashier VALUES($cashier,$numOfCashier, 1);\n";
 		print cashier $printline;
 	}
 	

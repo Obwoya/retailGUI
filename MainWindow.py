@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'UiFiles\MainWindow.ui'
 #
-# Created: Sun Dec 08 05:26:20 2013
+# Created: Mon Dec 09 03:38:52 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -39,24 +39,6 @@ class Ui_MainWindow(object):
         self.tabWidget = QtGui.QTabWidget(self.layoutWidget)
         self.tabWidget.setStyleSheet(_fromUtf8("wdjnv"))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
-        self.tab_1 = QtGui.QWidget()
-        self.tab_1.setObjectName(_fromUtf8("tab_1"))
-        self.label = QtGui.QLabel(self.tab_1)
-        self.label.setGeometry(QtCore.QRect(30, 30, 131, 31))
-        self.label.setObjectName(_fromUtf8("label"))
-        self.noTrans = QtGui.QLabel(self.tab_1)
-        self.noTrans.setGeometry(QtCore.QRect(40, 120, 201, 16))
-        self.noTrans.setText(_fromUtf8(""))
-        self.noTrans.setObjectName(_fromUtf8("noTrans"))
-        self.moneyDay = QtGui.QLabel(self.tab_1)
-        self.moneyDay.setGeometry(QtCore.QRect(320, 120, 201, 16))
-        self.moneyDay.setText(_fromUtf8(""))
-        self.moneyDay.setObjectName(_fromUtf8("moneyDay"))
-        self.noItems = QtGui.QLabel(self.tab_1)
-        self.noItems.setGeometry(QtCore.QRect(570, 120, 201, 16))
-        self.noItems.setText(_fromUtf8(""))
-        self.noItems.setObjectName(_fromUtf8("noItems"))
-        self.tabWidget.addTab(self.tab_1, _fromUtf8(""))
         self.tab_2 = QtGui.QWidget()
         self.tab_2.setObjectName(_fromUtf8("tab_2"))
         self.searchbarcode_products = QtGui.QPushButton(self.tab_2)
@@ -235,6 +217,7 @@ class Ui_MainWindow(object):
         self.sendsheets.setObjectName(_fromUtf8("sendsheets"))
         self.gridLayout.addWidget(self.sendsheets, 2, 0, 1, 1)
         self.updatestock = QtGui.QPushButton(self.layoutWidget)
+        self.updatestock.setStyleSheet(_fromUtf8("background-image:/img/logo.png"))
         self.updatestock.setObjectName(_fromUtf8("updatestock"))
         self.gridLayout.addWidget(self.updatestock, 3, 0, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
@@ -242,6 +225,18 @@ class Ui_MainWindow(object):
         self.logout.setObjectName(_fromUtf8("logout"))
         self.verticalLayout.addWidget(self.logout)
         self.horizontalLayout.addLayout(self.verticalLayout)
+        self.noTrans = QtGui.QLabel(self.centralwidget)
+        self.noTrans.setGeometry(QtCore.QRect(60, 20, 201, 16))
+        self.noTrans.setText(_fromUtf8(""))
+        self.noTrans.setObjectName(_fromUtf8("noTrans"))
+        self.moneyDay = QtGui.QLabel(self.centralwidget)
+        self.moneyDay.setGeometry(QtCore.QRect(340, 20, 211, 16))
+        self.moneyDay.setText(_fromUtf8(""))
+        self.moneyDay.setObjectName(_fromUtf8("moneyDay"))
+        self.noItems = QtGui.QLabel(self.centralwidget)
+        self.noItems.setGeometry(QtCore.QRect(590, 20, 201, 16))
+        self.noItems.setText(_fromUtf8(""))
+        self.noItems.setObjectName(_fromUtf8("noItems"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusBar = QtGui.QStatusBar(MainWindow)
         self.statusBar.setObjectName(_fromUtf8("statusBar"))
@@ -258,8 +253,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "Shop", None))
         self.tabWidget.setToolTip(_translate("MainWindow", "<html><head/><body><p>Products</p></body></html>", None))
-        self.label.setText(_translate("MainWindow", "Welcome Manager!", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_1), _translate("MainWindow", "Dashboard", None))
         self.searchbarcode_products.setText(_translate("MainWindow", "Filter Barcode", None))
         self.searchname_products.setText(_translate("MainWindow", "Filter Name", None))
         self.viewall_products.setText(_translate("MainWindow", "Refresh", None))

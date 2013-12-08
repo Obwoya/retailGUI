@@ -4,7 +4,6 @@ function dbconnect()
 {
 	$con = mysql_connect("localhost", "yatish", "null");
 	mysql_select_db("3002local", $con);
-	ini_set('max_execution_time', 600);
 	if(!$con)
 	{
 		die("Connection Failed!");
@@ -12,6 +11,11 @@ function dbconnect()
 	else{
 		return $con;
 	}
+}
+
+function dbclose($con)
+{
+	mysql_close($con);
 }
 
 //call to encrpt
@@ -68,7 +72,7 @@ function createJson()
                     AND barcode =$barcode;");
             $qtyreq = mysql_fetch_array($qtyquery);
             $qtyreq = intval($qtyreq[0]);
-            $qtyreq = intval($qtyreq);
+            $qtyreq = intval($qtyreq/7);
 
             $holdingquery = mysql_query("SELECT stocklevel, active FROM product WHERE barcode = $barcode");
             $holdreq = mysql_fetch_array($holdingquery);
@@ -78,8 +82,7 @@ function createJson()
 
             $salesquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
                     WHERE t.transactionid = td.transactionid 
-                    AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -7 DAY ) 
-                    AND DATE <= CURDATE( )  
+                    AND DATE = CURDATE( )  
                     AND type = 'sale' 
                     AND barcode =$barcode;");
             $salesreq = mysql_fetch_array($salesquery);
@@ -87,8 +90,7 @@ function createJson()
 
             $writeoffquery = mysql_query("SELECT SUM( unitsold ) FROM transactiondetails td, transaction t 
                     WHERE t.transactionid = td.transactionid 
-                    AND DATE >= DATE_ADD( CURDATE( ) , INTERVAL -7 DAY ) 
-                    AND DATE <= CURDATE( )  
+                    AND DATE = CURDATE( )  
                     AND type = 'write off' 
                     AND barcode =$barcode;");
             $writeoffreq = mysql_fetch_array($writeoffquery);
@@ -102,8 +104,14 @@ function createJson()
                     $posts[] = array('barcode'=>$barcode, 'quantity'=>encrypt($qtyreq), 'sales'=>encrypt($salesreq), 'write-off'=>encrypt($writeoffreq));
             }
         }
+
+		$revenueQuery = mysql_query("SELECT SUM(t.price) FROM transaction t
+        	WHERE t.date = CURDATE()");
+        $totalrevenue = mysql_fetch_array($revenueQuery);
+        $totalrevenue = $totalrevenue[0];
         
         $response['products'] = $posts;
+        $response['total'] = encrypt($totalrevenue);
         
         //name file by shop id from settings file
         $filename = '1.json';
@@ -118,99 +126,32 @@ function createJson()
 
 function postFileToUrl($filename)
 {
-	$target_url = 'http://172.28.180.133/api/upload.php';
+	$target_url = 'http://cg3002-20-z.comp.nus.edu.sg/api/upload.php';
         //This needs to be the full path to the file you want to send.
-	$file_name_with_full_path = './'.$filename;
+	//$file_name_with_full_path = 'C/shop/'.$filename;
 
 	// password should match the one on regional
     $password =  "helloworld";
     //md5 hash it     
     $key  = md5($password);     
       
-	$post = array('id' => '1', 'key' => $key, 'file_contents'=>'@'.$file_name_with_full_path);
+	$post = array('id' => '1', 'key' => $key, 'file_contents'=>'@C:\Users\yatishby\Desktop\Semester 5\CG3002\Project\retailGUI\1.json');
  
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL,$target_url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
 	curl_setopt($ch, CURLOPT_POST,1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 	$result=curl_exec ($ch);
+	$err = curl_errno($ch);
 	curl_close ($ch);
 	echo "Sent!!";
-	echo $result;
+	//echo $result;
+	echo $err;
 }
-
 
 function sendData()
 {
 	postFileToUrl(createJson());
 }
 
-function invert($num)
-{
-	if($num == 0){
-		$num = 1;
-	} else {
-		$num = 0;
-	}
-	return $num;
-}
-
-
-function getData() {
-	$url = 'http://cg3002-20-z.comp.nus.edu.sg/api/download/1-fc5e038d38a57032085441e7fe7010b0.json';
-	$con = dbconnect();
-	//$url = 'http://localhost/3002local/0-fc5e038d38a57032085441e7fe7010b0.json';
-	$json = file_get_contents($url);
-	$data = json_decode($json, true);
-	
-	foreach($data['product_list'] as $product) 
-	{
-		$barcode = ($product['barcode']);
-		$name = decrypt($product['name']);
-		$category = decrypt($product['category']);
-		$manufacturer = decrypt($product['manufacturer']);
-		$price = round(decrypt($product['costprice']), 2);
-		$active = invert(decrypt($product['deleted']));
-	
-		$query = mysql_query("SELECT count(*) FROM Product WHERE barcode='$barcode'");
-		$count = mysql_fetch_row($query);
-		$count = $count[0];
-		if($count > 0)
-		{
-			$query = mysql_query("SELECT count(*) FROM Product WHERE barcode=$barcode AND name='$name' AND category='$category' AND manufacturer='$manufacturer' AND cost=$price AND active=$active");
-			$requireUpdation = mysql_fetch_row($query);
-			$requireUpdation = $requireUpdation[0];
-			if($requireUpdation == 0)
-			{
-				mysql_query("UPDATE Product SET name='$name', category='$category', manufacturer='$manufacturer', cost=$price, active=$active WHERE barcode=$barcode");
-				//echo "UPDATE Product SET name='$name', category='$category', manufacturer='$manufacturer', cost=$price, active=$active WHERE barcode=$barcode"."<br>";
-			}
-			else
-			{
-				//echo "Not added"."<br>";
-			}
-		}
-		else
-		{
-			mysql_query("INSERT INTO Product(barcode,name,category,manufacturer,cost,stocklevel,active) VALUES ($barcode,'$name','$category','$manufacturer',$price,0,$active)");
-			//echo "INSERT INTO Product(barcode,name,category,manufacturer,cost,stocklevel,active) VALUES ($barcode,'$name','$category','$manufacturer',$price,0,$active)"."<br>";
-		}			
-	}
-	echo "finished product list";
-	
-	foreach($data['shipment_list'] as $ship) 
-	{
-		$barcode = ($ship['barcode']);
-		$quantity = decrypt($ship['quantity']);
-	
-		$query = mysql_query("SELECT * FROM Product WHERE barcode=$barcode");
-		if(mysql_num_rows($query) > 0)
-		{
-			mysql_query("UPDATE Product SET quantity=$quantity WHERE barcode=$barcode");
-		}			
-	}
-	echo "finished shipping list";
-	mysql_query("UPDATE flag SET flag=1 WHERE 1");
-}
 ?>

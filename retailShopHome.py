@@ -435,7 +435,7 @@ class MainWindow(QtGui.QMainWindow):
     	proc = subprocess.Popen("php senddata.php", shell=True, stdout=subprocess.PIPE)
     	script_response = proc.stdout.read()
         self.ui.statusBar.clearMessage()
-    	if "Sent!" in script_response:
+    	if "success" in script_response:
             self.ui.statusBar.showMessage("Orders Sent!", 5000)
     	else:
     		self.ui.statusBar.showMessage("Sending Failed. Check internet connection", 5000)

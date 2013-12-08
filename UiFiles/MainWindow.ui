@@ -38,63 +38,6 @@
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab_1">
-        <attribute name="title">
-         <string>Dashboard</string>
-        </attribute>
-        <widget class="QLabel" name="label">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>30</y>
-           <width>131</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Welcome Manager!</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="noTrans">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>120</y>
-           <width>201</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-        <widget class="QLabel" name="moneyDay">
-         <property name="geometry">
-          <rect>
-           <x>320</x>
-           <y>120</y>
-           <width>201</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-        <widget class="QLabel" name="noItems">
-         <property name="geometry">
-          <rect>
-           <x>570</x>
-           <y>120</y>
-           <width>201</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>Products</string>
@@ -702,6 +645,45 @@ color: rgb(255, 255, 255)
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="noTrans">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>20</y>
+      <width>201</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="moneyDay">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>20</y>
+      <width>211</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="noItems">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>20</y>
+      <width>201</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -716,9 +698,7 @@ color: rgb(255, 255, 255)
    </attribute>
   </widget>
  </widget>
- <resources>
-  <include location="pictures.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>logout</sender>
